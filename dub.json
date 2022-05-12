@@ -4,6 +4,6 @@
 	],
 	"copyright": "Copyright © 2022, Otter Programming Language",
 	"description": "A compiler for the Otter programming language.",
-	"license": "Zlib",
+	"license": "zlib",
 	"name": "otter"
 }

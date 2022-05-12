@@ -40,4 +40,4 @@ TODO
 TODO
 
 ## License
-**Otter** is distributed under the [**Zlib License**](https://en.wikipedia.org/wiki/Zlib_License#:~:text=The%20zlib%20license%20is%20a,interchangeably%20as%20zlib%2Flibpng%20license.). See [**LICENSE**](./LICENSE) for details.
+**Otter** is distributed under the [**zlib License**](https://en.wikipedia.org/wiki/Zlib_License#:~:text=The%20zlib%20license%20is%20a,interchangeably%20as%20zlib%2Flibpng%20license.). See [**LICENSE**](./LICENSE) for details.

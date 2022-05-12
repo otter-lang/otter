@@ -1,0 +1,15 @@
+# DUB Cache
+.dub
+
+# Binaries
+otter
+otter.so
+otter.dylib
+otter.dll
+otter.a
+otter.lib
+otter-test-*
+*.exe
+*.o
+*.obj
+*.lst

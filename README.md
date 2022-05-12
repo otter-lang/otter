@@ -1,2 +1,42 @@
-# otter
-A simple systems programming language.
+<img width="200px" src="./images/otter.png" align="right"/>
+
+## The Otter Programming Language
+**Otter** is a statically-typed systems programming language like [**C**](https://en.wikipedia.org/wiki/C_(programming_language)) that tries to keep simple and fast. It can compile to multiple targets like how [**Haxe**](https://en.wikipedia.org/wiki/Haxe) does, the targets being:
+
+* [**JavaScript**](https://en.wikipedia.org/wiki/JavaScript)
+* [**C++**](https://en.wikipedia.org/wiki/C%2B%2B)
+* [**x64-64**](https://en.wikipedia.org/wiki/X86-64)
+
+## Table of Contents  
+* [**Overview**](#overview)
+* [**Installing from Source**](#installing-from-source)
+* [**Building**](#building)
+* [**Getting Help**](#getting-help)
+* [**Contributing**](#contributing)
+* [**License**](#license)
+
+## Overview
+
+This repository is structured into the following directories.
+
+| Directory                  | Description                                                        |
+|----------------------------|--------------------------------------------------------------------|
+| [**docs**](./docs)         | Language specifiction, standard library documentation, etc.        |
+| [**examples**](./examples) | Various code examples.                                             |
+| [**images**](./images)     | Images that are used here.                                         |
+| [**source**](./source)     | Source code of the compiler.                                       |
+| [**tests**](./tests)       | Testing the compiler.                                              |
+
+## Installing from Source
+TODO
+
+## Building
+TODO
+
+## Getting Help
+TODO
+
+## Contributing
+TODO
+
+## License

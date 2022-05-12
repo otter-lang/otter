@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Otter Programming Language"
+	],
+	"copyright": "Copyright © 2022, Otter Programming Language",
+	"description": "A compiler for the Otter programming language.",
+	"license": "Zlib",
+	"name": "otter"
+}

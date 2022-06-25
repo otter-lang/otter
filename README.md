@@ -1,7 +1,7 @@
 <img width="200px" src="./images/otter.png" align="right"/>
 
 ## The Otter Programming Language
-**Otter** is an optionally-typed programming language like that *tries* to be simple and fast. It can compile to multiple targets like how [**Haxe**](https://en.wikipedia.org/wiki/Haxe) does, the targets being:
+**Otter** is a statically-typed programming language that *tries* to be simple and fast. It can compile to multiple targets like how [**Haxe**](https://en.wikipedia.org/wiki/Haxe) does, the targets being:
 
 * [**JavaScript**](https://en.wikipedia.org/wiki/JavaScript)
 * [**C**](https://en.wikipedia.org/wiki/C_(programming_language))

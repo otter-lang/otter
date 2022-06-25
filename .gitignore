@@ -13,3 +13,6 @@ oc-test-*
 *.o
 *.obj
 *.lst
+
+# Testing
+a.out

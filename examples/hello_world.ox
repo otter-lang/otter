@@ -1,6 +1,9 @@
 // https://en.wikipedia.org/wiki/%22Hello,_World!%22_program
+namespace main;
 
-void main()
+using std.io;
+
+function main(): int
 {
-    std.io.writeln("Hello, World!");
+    writeln("Hello, World!");
 }

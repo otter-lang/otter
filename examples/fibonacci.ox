@@ -1,6 +1,6 @@
 // https://en.wikipedia.org/wiki/Fibonacci_number
 
-int fibonacci(int number)
+function fibonacci(number: int): int
 {
     if (number <= 1)
         return number;

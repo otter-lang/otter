@@ -159,7 +159,7 @@ struct Scanner
                     // Single line comment?
                     if (end[1] == '/')
                     {
-                        while (!match('\n'))
+                        while (!match('\n') && !match('\0'))
                             advance();
                         
                         // Increase line information.

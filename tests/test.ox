@@ -8,7 +8,7 @@ extern function malloc(size: uword): *void;
 extern function realloc(memory: *void, size: uword): *void;
 extern function free(memory: *void): void;
 
-// A function of a constant pointer to a constant integer.
+// A function that returns a constant pointer of a constant integer.
 function cp2ci(): const *const int
 {
     return null;

@@ -100,9 +100,9 @@ class NodeNamespace : Node
         if (endsWith(file.source, "\n"))
             file.source ~= "\n";
 
-        string information = "/*\n\tnamespace " ~ name_string ~ "\n*/\n";
+        string information = "/*\n\tnamespace: " ~ name_string ~ "\n*/";
 
-        file.header ~= information;
+        file.header ~= (information ~ "\n");
         file.source ~= information;
 
         // We're inside this namespace.

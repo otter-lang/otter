@@ -23,6 +23,8 @@ using word_t  = long long;
 using single_t = float;
 using double_t = double;
 
+#define null nullptr;
+
 extern int_t main_main();
 
 int main()

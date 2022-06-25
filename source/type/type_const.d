@@ -3,21 +3,33 @@ module type.type_const;
 // type/
 import type.type;
 
+/// The position of the constant in a type.
+enum ConstPosition 
+{
+    Left,
+    Right,
+}
+
 /// A class that represents a constant type.
 class TypeConst : Type
 {
     /// The type that is constant.
     Type type;
 
+    /// The position of the constant.
+    ConstPosition position;
+
     /** 
         Default Constructor.
 
         Params:
-            type = The type to be constant.
+            type     = The type to be constant.
+            position = The position of the constant.
     */
-    this(Type type)
+    this(Type type, ConstPosition position)
     {
-        this.type = type;
+        this.type     = type;
+        this.position = position;
     }
     
     /// Is type void?
@@ -92,6 +104,9 @@ class TypeConst : Type
     /// Get the name of the type.
     override string get_name() 
     {
-        return ("const " ~ type.get_name());
+        if (position == ConstPosition.Right)
+            return ("const " ~ type.get_name());
+        else
+            return (type.get_name() ~ "const ");
     }
 }

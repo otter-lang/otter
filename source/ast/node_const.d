@@ -19,6 +19,11 @@ class NodeConst : Node
     /// The start token.
     Token start;
 
+    /// The position of the constant.
+    /// NOTE: const* = a constant pointer.
+    ///       *const = a pointer to a constant.
+    ConstPosition position;
+
     /// The type that is constant.
     Node type;
 
@@ -26,13 +31,15 @@ class NodeConst : Node
         Default Constructor.
 
         Params:
-            start = The start token.
-            type  = The type to be constant.
+            start    = The start token.
+            position = The position of the constant.
+            type     = The type to be constant.
     */
-    this(Token start, Node type)
+    this(Token start, ConstPosition position, Node type)
     {
-        this.start = start;
-        this.type  = type;
+        this.start    = start;
+        this.position = position;
+        this.type     = type;
     }
 
     /**
@@ -65,7 +72,7 @@ class NodeConst : Node
     */
     override Type check(ref SourceFile file)
     {
-        return new TypeConst(type.check(file));
+        return new TypeConst(type.check(file), position);
     }
 
     /**
@@ -76,6 +83,9 @@ class NodeConst : Node
     */
     override string emit(ref SourceFile file)
     {
-        return ("const " ~ type.emit(file));
+        if (position == ConstPosition.Right)
+            return ("const " ~ type.emit(file));
+        else
+            return (type.emit(file) ~ "const ");
     }
 }

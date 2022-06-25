@@ -170,13 +170,19 @@ struct Parser
         // Check for token.
         if (match(TokenKind.Const))
         {
+            // Get the position of the constant.
+            ConstPosition position = ConstPosition.Right;
+
+            if (scanner.current.kind == TokenKind.Star)
+                position = ConstPosition.Left;
+
             Token start = scanner.previous;
             Node  type  = parse_type();
 
             if (type is null)
                 file.error(scanner.previous.location, "expected type after 'const'.");
 
-            return new NodeConst(start, type);
+            return new NodeConst(start, position, type);
         }
         else if (match(TokenKind.Star))
         {

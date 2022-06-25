@@ -2,13 +2,13 @@
 .dub
 
 # Binaries
-otter
-otter.so
-otter.dylib
-otter.dll
-otter.a
-otter.lib
-otter-test-*
+oc
+oc.so
+oc.dylib
+oc.dll
+oc.a
+oc.lib
+oc-test-*
 *.exe
 *.o
 *.obj

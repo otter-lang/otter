@@ -10,7 +10,7 @@ extern function realloc(memory: *void, size: uword): *void;
 extern function free(memory: *void): void;
 
 // A function that returns a constant pointer of a constant integer.
-function cp2ci(): const *const int
+function cp2ci(): byte
 {
     return null;
 }

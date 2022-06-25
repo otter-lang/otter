@@ -154,7 +154,9 @@ struct SourceFile
             string name = get_diagnostic_name(diagnostic.kind);
 
             // Write file information and diagnostic message to console.
-            writec(DiagnosticColor.White, path ~ ": ");
+            writec(DiagnosticColor.White, "(" ~ path ~ ":" ~ to!(string)(location.line) 
+                                              ~ ":" ~ to!(string)(location.column)
+                                              ~ ") " ~ "");
             writec(color, name);
             writecln(DiagnosticColor.White, ": " ~ diagnostic.message);
 

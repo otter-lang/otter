@@ -293,7 +293,8 @@ struct Scanner
     private TokenKind make_identifier_token()
     {
         // Loop until no letter or underscore.
-        while (is_letter_or_underscore(*end))
+        while (is_letter_or_underscore(*end) ||
+               is_digit(*end))
             advance();
 
         // Check for keyword token.

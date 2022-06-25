@@ -1,4 +1,5 @@
-namespace main;
+// there's actually a 'namespace global;' here,
+// but we can't see! o.o 
 
 // Console functions.
 extern function puts(str: *const char): void;
@@ -13,6 +14,13 @@ function cp2ci(): const *const int
 {
     return null;
 }
+
+namespace math;
+
+function addi(a:   long, b:   long):   long {}
+function addf(a: double, b: double): double {}
+
+namespace main;
 
 // Entry point function.
 function main(): int

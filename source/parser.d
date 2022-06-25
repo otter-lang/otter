@@ -7,6 +7,7 @@ import ast;
 import type;
 
 // /
+import file_location;
 import namespace;
 import source_file;
 import scanner;
@@ -390,9 +391,20 @@ struct Parser
             // Set current scanner.
             scanner = (&source.scanner);
 
-            // Set file's namespace to be the global one, until
-            // we see a namespace "declaration".
-            file.current_namespace = (&g_namespaces["global"]);
+            // Always have a 'namespace global;' at the
+            // top of the file, in case there's no namespace specified.
+            file.nodes ~= new NodeNamespace
+            (
+                new NodeIdentifier
+                (
+                    Token
+                    (
+                        TokenKind.Identifier,
+                        FileLocation(),
+                        "global"
+                    )
+                )
+            );
 
             // Advance the current token, so it's easier to parse.
             advance();
@@ -408,24 +420,25 @@ struct Parser
 
         // Declare every node.
         foreach (ref SourceFile source; g_source_files)
-        foreach (ref Node        node;    source.nodes)
+        foreach (ref Node         node; source.nodes)
             node.declare(source);
 
         // Stop if any error happened.
         if (g_had_fatal_error)
             return;
 
-        // Define and check every node.
+        // Define every node.
         foreach (ref SourceFile source; g_source_files)
-        foreach (ref Node        node;    source.nodes)
-        {
+        foreach (ref Node         node; source.nodes)
             node.define(source);
 
-            // Stop if any error happened.
-            if (g_had_fatal_error)
-                return;
+        // Stop if any error happened.
+        if (g_had_fatal_error)
+            return;
 
+        // Check every node.
+        foreach (ref SourceFile source; g_source_files)
+        foreach (ref Node         node; source.nodes)
             node.check(source);
-        }
     }
 }

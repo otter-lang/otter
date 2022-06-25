@@ -140,7 +140,7 @@ class NodeFunction : Node
         if (block !is null)
         {
             // Emit head in source.
-            file.source ~= function_head ~ "\n";
+            file.source ~= "\n" ~ function_head ~ "\n";
 
             // Emit the function body (block).
             if (block !is null)

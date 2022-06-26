@@ -74,6 +74,6 @@ class NodeParameter : Node
     */
     override string emit(ref SourceFile file)
     {
-        return (type.emit(file) ~ file.mangle_name(name.content));
+        return (type.emit(file) ~ "__" ~ file.mangle_name(name.content));
     }
 }

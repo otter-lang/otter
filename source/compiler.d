@@ -74,7 +74,7 @@ struct Compiler
                                             : "successful";
 
         // A little grammar thing.
-        string s = (g_diagnostic_amount > 0) ? "s" 
+        string s = (g_diagnostic_amount > 1) ? "s" 
                                              : "";
 
         // Write passed message to console.

@@ -5,10 +5,14 @@ import type;
 
 // /
 import source_file;
+import token;
 
 /// A class that represents an Abstract Syntax Tree node.
 class Node
-{
+{    
+    /// The start token.
+    Token start;
+    
     /**
         Declare pass.
 
@@ -46,9 +50,10 @@ class Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    string emit(ref SourceFile file)
+    string emit(ref SourceFile file, bool mangle = false)
     {
         return null;
     }

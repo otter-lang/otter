@@ -86,9 +86,10 @@ class NodeNamespace : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
         // Get namespace name.
         string name_string = name.emit(file);
@@ -100,7 +101,7 @@ class NodeNamespace : Node
         if (endsWith(file.source, "\n"))
             file.source ~= "\n";
 
-        string information = "/*\n\tnamespace: " ~ name_string ~ "\n*/";
+        string information = "/*\n\tnamespace: " ~ name_string ~ "\n*/\n";
 
         file.header ~= (information ~ "\n");
         file.source ~= information;

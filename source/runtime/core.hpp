@@ -8,12 +8,14 @@ using bool_t   = bool;
 
 struct string_t;
 
+using uchar_t  = unsigned char;
 using ubyte_t  = unsigned char;
 using ushort_t = unsigned short;
 using uint_t   = unsigned int;
 using ulong_t  = unsigned long long;
 using uword_t  = unsigned long long;
 
+using char_t  = char;
 using byte_t  = char;
 using short_t = short;
 using int_t   = int;

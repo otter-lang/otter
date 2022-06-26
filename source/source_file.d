@@ -52,6 +52,9 @@ struct SourceFile
     /// The current namespace we're inside.
     Namespace *current_namespace;
 
+    /// The current symbol being used.
+    Symbol *current_symbol;
+
     /// The namespaces being used.
     Namespace *[]namespaces;
     
@@ -248,13 +251,15 @@ struct SourceFile
     */
     Symbol *find_symbol(string name)
     {
+        current_symbol = null;
+
         // Check for any dot, if there's one then we need to 
         // try finding the symbol globally or locally too 
         // (because static classes/structures). 
         if (name.indexOf('.') != -1)
         {
             // TODO
-            return null;
+            return current_symbol;
         }
         // There's no dot, it's a symbol that is local or is in
         // a namespace being used.
@@ -262,17 +267,20 @@ struct SourceFile
         {
             // Try finding the symbol locally first.
             if ((name in current_namespace.symbols) !is null)
-                return (&current_namespace.symbols[name]);
+                current_symbol = (&current_namespace.symbols[name]);
 
             // Try finding the symbol inside used namespaces.
             foreach (Namespace *used_namespace; namespaces)
             {
                 if ((name in used_namespace.symbols) !is null)
-                    return (&used_namespace.symbols[name]);
+                {
+                    current_symbol = (&used_namespace.symbols[name]);
+                    break;
+                }
             }
 
             // We didn't find this symbol.
-            return null;
+            return current_symbol;
         }
     }
 }

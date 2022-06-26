@@ -24,6 +24,7 @@ class NodeString : Node
     */
     this(Token value)
     {
+        this.start = value;
         this.value = value;
     }
 
@@ -64,9 +65,10 @@ class NodeString : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
         return value.content;
     }

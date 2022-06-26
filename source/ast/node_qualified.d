@@ -8,6 +8,7 @@ import type;
 
 // /
 import source_file;
+import symbol;
 import token;
 
 /// A class that represents an Abstract Syntax Tree a qualified name node.
@@ -62,6 +63,11 @@ class NodeQualified : Node
     */
     override Type check(ref SourceFile file)
     {
+        Symbol *symbol = file.find_symbol(emit(file));
+
+        if (symbol !is null)
+            return symbol.type;
+
         return null;
     }
 
@@ -69,10 +75,14 @@ class NodeQualified : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
-        return (left.emit(file) ~ "." ~ right.emit(file));
+        string name = (left.emit(file) ~ "." ~ right.emit(file));
+
+        return (mangle) ? file.mangle_name(name)
+                        : name;
     }
 }

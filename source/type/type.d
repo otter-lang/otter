@@ -1,5 +1,8 @@
 module type.type;
 
+// type/
+import type.type_primitive;
+
 /// A class that represents a type.
 class Type
 {
@@ -97,13 +100,8 @@ class Type
         return 0;
     }
 
-    /** 
-        Get return type from function type only and check parameters types.
-    
-        Params:
-            parameters = The parameters to be checked.
-    */
-    Type get_return_type(Type[] parameters) 
+    /// Get return type from function type.
+    Type get_return_type() 
     {
         return null;
     }
@@ -124,5 +122,11 @@ class Type
     string get_name() 
     {
         return null;
+    }
+
+    /// Get the kind of primitive type.
+    PrimitiveKind get_kind()
+    {
+        return PrimitiveKind.Null;
     }
 }

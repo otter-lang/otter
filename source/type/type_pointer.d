@@ -1,6 +1,7 @@
 module type.type_pointer;
 
 // type/
+import type.type_primitive;
 import type.type;
 
 /// A class that represents a pointer type.
@@ -63,8 +64,14 @@ class TypePointer : Type
     */
     override bool is_identical(Type other) 
     {
-        // Allow checking null.
+        // Allow null.
         if (other.is_null())
+            return true;
+
+        // *const char == string
+        if (base.is_const()                                            && 
+            base.get_deconsted_type().get_kind() == PrimitiveKind.Char &&
+            other.is_string())
             return true;
         
         // Make sure both types are pointers 
@@ -87,6 +94,6 @@ class TypePointer : Type
     /// Get the name of the type.
     override string get_name() 
     {
-        return (base.get_name() ~ "*");
+        return ("*" ~ base.get_name());
     }
 }

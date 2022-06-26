@@ -13,9 +13,6 @@ import token;
 /// A class that represents an Abstract Syntax Tree return statement node.
 class NodeReturn : Node
 {
-    /// The start token (where expression starts).
-    Token start;
-
     /// The return value.
     Node expression;
 
@@ -54,13 +51,13 @@ class NodeReturn : Node
                                                       expression.check(file);
 
         // Get function return type.
-        Type return_type = file.current_function.type.get_return_type(null);
+        Type return_type = file.current_function.type.get_return_type();
 
         // Check for function return type and expression type.
         if (!return_type.is_identical(expression_type))
         {
             file.error(start.location, "return value type don't match function return type.");
-            file.note(file.current_function.location, "the function declaration here.");
+            file.note(file.current_function.location, "the function declaration is here.");
         }
 
         return null;
@@ -70,9 +67,10 @@ class NodeReturn : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
         // Emit "return".
         file.source ~= "return";

@@ -1,7 +1,11 @@
 module type.type_primitive;
 
-// type/
-import type.type;
+// type/*
+import type;
+
+// standard
+import std.conv;
+import std.string;
 
 /// The kind of a primitive type.
 enum PrimitiveKind : uint
@@ -18,6 +22,9 @@ enum PrimitiveKind : uint
     /// Represents a string type.
     String,
 
+    /// Represents an unsigned 8 bits character.
+    UChar,
+
     /// Represents an unsigned 8 bits integer.
     UByte,
 
@@ -32,6 +39,9 @@ enum PrimitiveKind : uint
 
     /// Represents an unsigned pointer size integer.
     UWord,
+
+    /// Represents a signed 8 bits character.
+    Char,
 
     /// Represents a signed 8 bits integer.
     Byte,
@@ -94,14 +104,14 @@ class TypePrimitive : Type
     /// Is type an integer?
     override bool is_integer() 
     {
-        return (kind >= PrimitiveKind.UByte &&
+        return (kind >= PrimitiveKind.UChar &&
                 kind <= PrimitiveKind.Word);
     }
     
     /// Is type an unsigned integer?
     override bool is_unsigned() 
     {
-        return (kind >= PrimitiveKind.UByte &&
+        return (kind >= PrimitiveKind.UChar &&
                 kind <= PrimitiveKind.UWord);
     }
 
@@ -177,6 +187,8 @@ class TypePrimitive : Type
     {
         switch (kind)
         {
+            case PrimitiveKind.UChar:
+            case PrimitiveKind.Char:
             case PrimitiveKind.UByte:
             case PrimitiveKind.Byte:
             case PrimitiveKind.Bool:
@@ -208,29 +220,12 @@ class TypePrimitive : Type
     /// Get the name of the type.
     override string get_name() 
     {
-        string[] names =
-        [
-            "void",
-            "bool",
-            "string",
+        return (to!(string)(kind)).toLower();
+    }
 
-            "ubyte",
-            "ushort",
-            "uint",
-            "ulong",
-            "uword",
-
-            "byte",
-            "short",
-            "int",
-            "long",
-            "word",
-
-            "single",
-            "double",
-        ];
-
-        // NOTE: -1 since null is not a real type.
-        return names[kind - 1];
+    /// Get the kind of primitive type.
+    override PrimitiveKind get_kind()
+    {
+        return kind;
     }
 }

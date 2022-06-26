@@ -32,7 +32,7 @@ class TypeFunction : Type
 
         // Get return type and check parameters
         // types.
-        Type return_type = other.get_return_type(parameters);
+        Type return_type = other.get_return_type();
 
         // Check return types.
         if (return_type !is null)
@@ -47,15 +47,9 @@ class TypeFunction : Type
         Params:
             parameters = The parameters to be checked.
     */
-    override Type get_return_type(Type[] parameters) 
+    override Type get_return_type() 
     {
-        // Return the return type if parameters
-        // array is null.
-        if (parameters is null)
-            return type;
-        
-        // TODO: checking.
-        return null;
+        return type;
     }
 
     /// Get the name of the type.

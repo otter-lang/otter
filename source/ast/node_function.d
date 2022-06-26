@@ -40,6 +40,7 @@ class NodeFunction : Node
         if (file.find_symbol(name.content) !is null)
         {
             file.error(name.location, "this symbol was already declared.");
+            file.note(file.current_symbol.location, "the symbol is declared here.");
             return;
         }
 
@@ -103,9 +104,10 @@ class NodeFunction : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
         // We're emitting this function.
         file.current_function = file.find_symbol(name.content);
@@ -123,9 +125,9 @@ class NodeFunction : Node
                function_head ~= file.mangle_name(name.content);
                function_head ~= "(";
 
-        for (uint index = 0; index < parameters.length; ++index)
+        foreach (ulong index, ref Node parameter; parameters)
         {
-            function_head ~= parameters[index].emit(file);
+            function_head ~= parameter.emit(file);
 
             if (index != (cast(int)parameters.length - 1))
                 function_head ~= ", ";
@@ -134,7 +136,10 @@ class NodeFunction : Node
         function_head ~= ")";
 
         // Emit declaration in header.
-        file.header ~= "extern " ~ function_head ~ ";\n";
+        string extern_string = (block is null) ? "extern \"C\" "
+                                               : "extern ";
+
+        file.header ~= extern_string ~ function_head ~ ";\n";
 
         // Emit source (if not extern).
         if (block !is null)

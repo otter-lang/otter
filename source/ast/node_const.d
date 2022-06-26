@@ -16,9 +16,6 @@ import std.conv;
 /// A class that represents an Abstract Syntax Tree constant type node.
 class NodeConst : Node
 {
-    /// The start token.
-    Token start;
-
     /// The position of the constant.
     /// NOTE: const* = a constant pointer.
     ///       *const = a pointer to a constant.
@@ -79,9 +76,10 @@ class NodeConst : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
         if (position == ConstPosition.Right)
             return ("const " ~ type.emit(file));

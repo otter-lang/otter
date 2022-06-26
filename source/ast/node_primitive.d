@@ -17,9 +17,6 @@ import std.uni;
 /// A class that represents an Abstract Syntax Tree primitive type node.
 class NodePrimitive : Node
 {
-    /// The start token.
-    Token start;
-
     /// The primitive kind.
     PrimitiveKind kind;
 
@@ -73,9 +70,10 @@ class NodePrimitive : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
         return (to!(string)(kind)).toLower() ~ "_t ";
     }

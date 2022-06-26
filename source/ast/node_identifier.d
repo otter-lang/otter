@@ -25,6 +25,7 @@ class NodeIdentifier : Node
     */
     this(Token identifier)
     {
+        this.start      = identifier;
         this.identifier = identifier;
     }
 
@@ -58,6 +59,11 @@ class NodeIdentifier : Node
     */
     override Type check(ref SourceFile file)
     {
+        Symbol *symbol = file.find_symbol(identifier.content);
+
+        if (symbol !is null)
+            return symbol.type;
+
         return null;
     }
 
@@ -65,10 +71,14 @@ class NodeIdentifier : Node
         Emit pass.
 
         Params:
-            file = The file where the node was parsed.
+            file   = The file where the node was parsed.
+            mangle = Mangle the identifier that will be emitted?
     */
-    override string emit(ref SourceFile file)
+    override string emit(ref SourceFile file, bool mangle = false)
     {
-        return identifier.content;
+        string name = identifier.content;
+
+        return (mangle) ? file.mangle_name(name)
+                        : name;
     }
 }

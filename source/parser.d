@@ -30,15 +30,15 @@ struct Parser
         "bool"   : PrimitiveKind.Bool,
         "string" : PrimitiveKind.String,
 
+        "uchar"  : PrimitiveKind.UChar,
         "ubyte"  : PrimitiveKind.UByte,
-        "uchar"  : PrimitiveKind.UByte,
         "ushort" : PrimitiveKind.UShort,
         "uint"   : PrimitiveKind.UInt,
         "ulong"  : PrimitiveKind.ULong,
         "uword"  : PrimitiveKind.UWord,
 
+        "char"  : PrimitiveKind.Char,
         "byte"  : PrimitiveKind.Byte,
-        "char"  : PrimitiveKind.Byte,
         "short" : PrimitiveKind.Short,
         "int"   : PrimitiveKind.Int,
         "long"  : PrimitiveKind.Long,
@@ -99,8 +99,8 @@ struct Parser
         file.error(scanner.current.location, message);
     }
 
-    /// Parse literal.
-    Node parse_literal()
+    /// Parse primary expression.
+    Node parse_primary()
     {
         // Integer literal.
         if (match(TokenKind.Integer))
@@ -225,13 +225,63 @@ struct Parser
 
         if (!match(TokenKind.Semicolon))
         {
-            node.expression = parse_literal(); // TODO: expression parsing.
+            node.expression = parse_primary(); // TODO: expression parsing.
 
             // Expect semicolon.
             consume(TokenKind.Semicolon, "expected ';'.");
         }
 
         return node;
+    }
+
+     /** 
+        Parse call.
+
+        Params:
+            expression   = The expression being called.
+            is_statement = Is the call a statement?
+    */
+    Node parse_call(Node expression, bool is_statement)
+    {
+        NodeCall node              = new NodeCall();
+                 node.start        = scanner.previous;
+                 node.expression   = expression;
+                 node.is_statement = is_statement;
+
+        // Parse call parameters.
+        if (!match(TokenKind.RightParenthesis))
+        {
+            do
+            {
+                // TODO: parse expression
+                node.parameters ~= parse_primary();
+            }
+            while (match(TokenKind.Comma));
+
+            consume(TokenKind.RightParenthesis, "expected ')' after call parameter(s).");
+        }
+
+        // Expect semicolon.
+        consume(TokenKind.Semicolon, "expected ';'.");
+        return node;
+    }
+
+    /// Parse identifier.
+    Node parse_identifier()
+    {
+        Token identifier = scanner.previous;
+
+        // Call?
+        if (match(TokenKind.LeftParenthesis))
+        {
+            return parse_call
+            (
+                new NodeIdentifier(identifier),
+                true
+            );
+        }
+
+        return null;
     }
 
     /// Parse statement.
@@ -246,6 +296,10 @@ struct Parser
             // Return.
             case TokenKind.Return:
                 return parse_return();
+
+            // Identifier.
+            case TokenKind.Identifier:
+                return parse_identifier();
 
             // Unexpected token.
             default:

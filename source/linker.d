@@ -74,7 +74,7 @@ struct Linker
             write(file_path ~ ".hpp", header);
 
             // Generate source file.
-            string source  = "#include <" ~ path ~ ".hpp>\n\n";
+            string source  = "#include <" ~ path ~ ".hpp>\n";
                    source ~= file.source;
 
             // Remove useless line at end (if there's one).

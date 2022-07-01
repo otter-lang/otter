@@ -4,11 +4,6 @@
 // Tell the compiler we're using an extern C function.
 extern function puts(str: *const char): int;
 
-function writeln(content: *const char)
-{
-    puts(content);
-}
-
 // Entry point namespace.
 namespace main;
 
@@ -17,4 +12,12 @@ function main(): int
 {
     writeln("hi");
     return 0;
+}
+
+namespace global;
+
+function writeln(content: *const char)
+{
+    puts(content);
+    puts("a");
 }

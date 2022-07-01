@@ -91,23 +91,8 @@ class NodeNamespace : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
-        // Get namespace name.
-        string name_string = name.emit(file);
-
-        // Generate a little comment information.
-        if (endsWith(file.header, "\n"))
-            file.header ~= "\n";
-
-        if (endsWith(file.source, "\n"))
-            file.source ~= "\n";
-
-        string information = "/*\n\tnamespace: " ~ name_string ~ "\n*/\n";
-
-        file.header ~= (information ~ "\n");
-        file.source ~= information;
-
         // We're inside this namespace.
-        file.current_namespace = (&g_namespaces[name_string]);
+        file.current_namespace = (&g_namespaces[name.emit(file)]);
         return null;
     }
 }

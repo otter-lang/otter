@@ -1,2 +1,2 @@
 # To do
-- [ ] Make it possible to use function parameters.
+- [x] Make it possible to use function parameters.

@@ -7,12 +7,13 @@
 	namespace: global
 */
 
+extern "C" int_t puts(const char_t *global_puts_str);
+extern void_t global_writeln(const char_t *global_writeln_content);
 
 /*
 	namespace: main
 */
 
-extern "C" int_t puts(const char_t *__str);
-extern int main_main();
+extern int main_main(void);
 
 #endif

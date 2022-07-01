@@ -27,6 +27,7 @@ class NodeNull : Node
     */
     this(Token value)
     {
+        this.start = value;
         this.value = value;
     }
 

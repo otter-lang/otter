@@ -16,6 +16,9 @@ enum SymbolKind
 
     /// The symbol is a function.
     Function,
+
+    /// The symbol is a parameter.
+    Parameter,
 }
 
 /// The property of a symbol.

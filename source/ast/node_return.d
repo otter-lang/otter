@@ -77,7 +77,7 @@ class NodeReturn : Node
 
         // Check for value
         if (expression !is null)
-            file.source ~= (" " ~ expression.emit(file) ~ ";\n"); // emit " <expression>;\n".
+            file.source ~= (" " ~ expression.emit(file, true) ~ ";\n"); // emit " <expression>;\n".
         else
             file.source ~= ";\n"; // emit ";\n".
 

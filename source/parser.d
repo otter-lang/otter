@@ -122,6 +122,10 @@ struct Parser
         if (match(TokenKind.Null))
             return new NodeNull(scanner.previous);
 
+        // Identifier.
+        if (match(TokenKind.Identifier))
+            return new NodeIdentifier(scanner.previous);
+
         // Unexpected token.
         file.error(scanner.current.location, "unexpected token.");
         return null;

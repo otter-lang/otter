@@ -236,11 +236,26 @@ struct SourceFile
 
         // Mangle symbol (if not extern).
         Symbol symbol = current_namespace.symbols[name];
+        return mangle_symbol(&symbol);
+    }
 
+    /** 
+        Mangle symbol.
+
+        Params:
+            name = The symbol to be mangled.
+    */
+    string mangle_symbol(Symbol *symbol)
+    {
         if (symbol.property == PropertyKind.Extern)
-            return name;
+            return symbol.name;
 
-        return (symbol.namespace.name.replace(".", "_") ~ "_" ~ name);
+        string fprefix = "";
+
+        if (symbol.kind == SymbolKind.Parameter)
+            fprefix = current_function.name ~ "_";
+
+        return (symbol.namespace.name.replace(".", "_") ~ "_" ~ fprefix ~ symbol.name);
     }
 
     /** 
@@ -263,11 +278,15 @@ struct SourceFile
         }
         // There's no dot, it's a symbol that is local or is in
         // a namespace being used.
-        else
+        else if (current_namespace !is null)
         {
             // Try finding the symbol locally first.
             if ((name in current_namespace.symbols) !is null)
                 current_symbol = (&current_namespace.symbols[name]);
+
+            // Try finding the symbol globally.
+            if ((name in g_namespaces["global"].symbols) !is null)
+                current_symbol = (&g_namespaces["global"].symbols[name]);
 
             // Try finding the symbol inside used namespaces.
             foreach (Namespace *used_namespace; namespaces)
@@ -282,5 +301,7 @@ struct SourceFile
             // We didn't find this symbol.
             return current_symbol;
         }
+        
+        return null;
     }
 }

@@ -4,12 +4,17 @@
 	namespace: global
 */
 
+void_t global_writeln(const char_t *global_writeln_content)
+{
+	puts(global_writeln_content);
+}
+
 /*
 	namespace: main
 */
 
-int main_main()
+int main_main(void)
 {
-	puts("hello!");
+	global_writeln("hi");
 	return 0;
 }

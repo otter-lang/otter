@@ -27,7 +27,7 @@ using double_t = double;
 
 #define null nullptr;
 
-extern int_t main_main();
+extern int main_main();
 
 int main()
 {

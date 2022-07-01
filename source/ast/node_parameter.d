@@ -9,7 +9,7 @@ import type;
 // /
 import source_file;
 import token;
-
+import symbol;
 
 /// A class that represents an Abstract Syntax Tree function parameter node.
 class NodeParameter : Node
@@ -52,7 +52,17 @@ class NodeParameter : Node
     */
     override void define(ref SourceFile file)
     {
-
+        file.current_namespace.symbols[name.content] =
+        Symbol
+        (
+            SymbolKind.Parameter,
+            PropertyKind.None,
+            file.current_namespace,
+            name.content,
+            &file,
+            name.location,
+            check(file),
+        );
     }
 
     /**
@@ -75,6 +85,6 @@ class NodeParameter : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
-        return (type.emit(file) ~ "__" ~ file.mangle_name(name.content));
+        return (type.emit(file) ~ file.mangle_name(name.content));
     }
 }

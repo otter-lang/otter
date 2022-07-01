@@ -109,7 +109,7 @@ class NodeCall : Node
 
         foreach (ulong index, ref Node parameter; parameters)
         {
-            file.source ~= parameter.emit(file);
+            file.source ~= parameter.emit(file, true);
 
             if (index != (cast(int)parameters.length - 1))
                 file.source ~= ", ";

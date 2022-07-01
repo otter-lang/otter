@@ -76,9 +76,10 @@ class NodeIdentifier : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
-        string name = identifier.content;
+        Symbol *symbol = file.find_symbol(identifier.content);
+        string    name = identifier.content;
 
-        return (mangle) ? file.mangle_name(name)
+        return (mangle) ? file.mangle_symbol(symbol)
                         : name;
     }
 }

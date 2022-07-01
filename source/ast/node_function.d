@@ -80,6 +80,10 @@ class NodeFunction : Node
 
         // Set type to symbol.
         symbol.type = function_type;
+
+        // Define parameter symbols.
+        foreach (ref Node parameter; parameters)
+            parameter.define(file);
     }
 
     /**
@@ -132,6 +136,9 @@ class NodeFunction : Node
             if (index != (cast(int)parameters.length - 1))
                 function_head ~= ", ";
         }
+
+        if (parameters.length == 0)
+            function_head ~= "void";
 
         function_head ~= ")";
 

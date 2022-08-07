@@ -1,6 +1,6 @@
 // https://en.wikipedia.org/wiki/Factorial
 
-function factorial(number: int): int
+int factorial(int number)
 {
     if (number == 0)
         return 1;

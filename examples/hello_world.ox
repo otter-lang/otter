@@ -3,7 +3,7 @@ namespace main;
 
 using std.io;
 
-function main(): int
+int main()
 {
     writeln("Hello, World!");
 }

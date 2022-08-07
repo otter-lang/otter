@@ -85,7 +85,11 @@ class NodeCall : Node
 
                     // Compare types.
                     if (!parameter.is_identical(call_parameter))
-                        file.error(parameters[index].start.location, "expected '" ~ parameter.get_name() ~ "', got '" ~ call_parameter.get_name() ~ "'.");
+                    {
+                        file.error(parameters[index].start.location, 
+                            "expected '" ~ parameter.get_name()      ~ "', got '" 
+                                         ~ call_parameter.get_name() ~ "'.");
+                    }
                 }
             }
 

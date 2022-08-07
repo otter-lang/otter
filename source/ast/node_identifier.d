@@ -63,6 +63,8 @@ class NodeIdentifier : Node
 
         if (symbol !is null)
             return symbol.type;
+        else
+            file.error(identifier.location, "this symbol doesn't exist.");
 
         return null;
     }

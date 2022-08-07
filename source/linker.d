@@ -66,7 +66,17 @@ struct Linker
             string guard   = replace(toUpper(path), "/", "_");
             string header  = "#ifndef " ~ guard ~ "_HPP\n";
                    header ~= "#define " ~ guard ~ "_HPP\n\n";
-                   header ~= "#include <otter/runtime/include.hpp>\n\n";
+                   header ~= "#include <otter/runtime/include.hpp>\n";
+
+            // Include global namespace files by default.
+            foreach (ref SourceFile f; g_source_files)
+            {
+                if (f.current_namespace.name == "global" &&
+                    f.path != file.path)
+                    header ~= "#include <" ~ get_path(f.path) ~ ".hpp>\n";
+            }
+
+                    header ~= "\n";
                    header ~= file.header;
                    header ~= "\n#endif";
 

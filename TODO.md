@@ -1,2 +1,3 @@
 # To do
-- [x] Make it possible to use function parameters.
+- [ ] clear the parse_type() functions.
+- [ ] qualified node location.

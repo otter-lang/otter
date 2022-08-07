@@ -172,50 +172,101 @@ struct Parser
     /// Try parsing a type.
     Node parse_type()
     {
-        // Check for token.
+        Node node = null;
+
+        // Check for constant identifier.
         if (match(TokenKind.Const))
-        {
-            // Get the position of the constant.
-            ConstPosition position = ConstPosition.Right;
-
-            if (scanner.current.kind == TokenKind.Star)
-                position = ConstPosition.Left;
-
-            Token start = scanner.previous;
-            Node  type  = parse_type();
-
-            if (type is null)
-                file.error(scanner.previous.location, "expected type after 'const'.");
-
-            return new NodeConst(start, position, type);
-        }
-        else if (match(TokenKind.Star))
-        {
-            Token start = scanner.previous;
-            Node  type  = parse_type();
-
-            if (type is null)
-                file.error(scanner.previous.location, "expected type after '*'.");
-
-            return new NodePointer(start, type);
-        }
-        else
-            advance();
-
+            node = new NodeConst(scanner.previous, ConstPosition.Left, null);
+    
         // Check if type exists.
+        advance();
         Token name = scanner.previous;
 
         if ((name.content in types) !is null)
         {
-            return new NodePrimitive
+            Node primitive = new NodePrimitive
             (
                 name,
                 types[name.content]
             );
+
+            // Check for constant type.
+            if (node !is null)
+            {
+                NodeConst const_node      = cast(NodeConst)node;
+                          const_node.type = primitive;
+            }
+            else
+                node = primitive;
         }
 
-        // Does not exist.
-        return null;
+        // Failed to parse type.
+        if (node is null)
+            file.error(name.location, "expected type.");
+        else
+        {
+            // Check for pointer type.
+            while (match(TokenKind.Star))
+                node = new NodePointer(scanner.previous, node);
+
+            // Check for constant pointer.
+            if (match(TokenKind.Const))
+                node = new NodeConst(scanner.previous, ConstPosition.Right, node);
+        }
+
+        return node;
+    }
+
+    /// Try parsing a type.
+    Node parse_type(Token token)
+    {
+        Node node = null;
+
+        // Check for constant identifier.
+        if (token.kind == TokenKind.Const)
+        {
+            node = new NodeConst(scanner.previous, ConstPosition.Left, null);
+            
+            advance();
+            token = scanner.previous;
+        }
+    
+        // Check if type exists.
+        Token name = token;
+
+        if ((name.content in types) !is null)
+        {
+            Node primitive = new NodePrimitive
+            (
+                name,
+                types[name.content]
+            );
+
+            // Check for constant type.
+            if (node !is null)
+            {
+                NodeConst const_node      = cast(NodeConst)node;
+                          const_node.type = primitive;
+            }
+            else
+                node = primitive;
+        }
+
+        // Failed to parse type.
+        if (node is null)
+            file.error(name.location, "expected type.");
+        else
+        {
+            // Check for pointer type.
+            while (match(TokenKind.Star))
+                node = new NodePointer(scanner.previous, node);
+
+            // Check for constant pointer.
+            if (match(TokenKind.Const))
+                node = new NodeConst(scanner.previous, ConstPosition.Right, node);
+        }
+
+        return node;
     }
 
     /// Parse return statement.
@@ -331,13 +382,21 @@ struct Parser
         return node;
     }
 
-    /// Parse function declaration.
-    void parse_function(bool is_extern = false)
+    /// Parse extern function declaration.
+    Node parse_extern_function()
     {
         NodeFunction node = new NodeFunction();
 
+        // Parse function return type.
+        Node type = parse_type();
+
+        if (type is null)
+            file.error(scanner.previous.location, "expected extern function type.");
+
+        node.type = type;
+
         // Parse function name.
-        consume(TokenKind.Identifier, "expected function name.");
+        consume(TokenKind.Identifier, "expected extern function name after type.");
         node.name = scanner.previous;
 
         // Parse function parameters.
@@ -347,17 +406,16 @@ struct Parser
         {
             do
             {
-                // Parse parameter name.
-                consume(TokenKind.Identifier, "expected parameter name.");
-                Token parameter_name = scanner.previous;
-
                 // Parse parameter type.
-                consume(TokenKind.Colon, "expected ':' after parameter name.");
                 Node parameter_type = parse_type();
 
                 if (parameter_type is null)
-                    file.error(scanner.previous.location, "expected parameter type after ':'.");
+                    file.error(scanner.previous.location, "expected parameter type.");
 
+                // Parse parameter name.
+                consume(TokenKind.Identifier, "expected parameter name after type.");
+                Token parameter_name = scanner.previous;
+                
                 // Add parameter.
                 node.parameters ~= new NodeParameter(parameter_type, parameter_name);
             }
@@ -366,32 +424,71 @@ struct Parser
             // Expect right parenthesis.
             consume(TokenKind.RightParenthesis, "expected ')' after parameter(s).");
         }
-        
-        // Parse function return type (optional).
-        if (match(TokenKind.Colon))
-        {
-            node.type = parse_type();
 
-            if (node.type is null)
-                file.error(scanner.previous.location, "expected function return type after ':'.");
+        consume(TokenKind.Semicolon, "expected ';'.");
+        return node;
+    }
+
+    /// Parse function declaration.
+    Node parse_function(Node type, Token name)
+    {
+        NodeFunction node = new NodeFunction();
+
+        // Parse function name.
+        node.type = type;
+        node.name = name;
+
+        // Parse function parameters.
+        if (!match(TokenKind.RightParenthesis))
+        {
+            do
+            {
+                // Parse parameter type.
+                Node parameter_type = parse_type();
+
+                if (parameter_type is null)
+                    file.error(scanner.previous.location, "expected parameter type.");
+
+                // Parse parameter name.
+                consume(TokenKind.Identifier, "expected parameter name after type.");
+                Token parameter_name = scanner.previous;
+                
+                // Add parameter.
+                node.parameters ~= new NodeParameter(parameter_type, parameter_name);
+            }
+            while (match(TokenKind.Comma));
+
+            // Expect right parenthesis.
+            consume(TokenKind.RightParenthesis, "expected ')' after parameter(s).");
         }
+
+        // Parse function body.
+        consume(TokenKind.LeftBrace, "expected '{'.");
+        node.block = parse_block();
+
+        return node;
+    }
+
+    /** 
+         Try parsing a declaration.
+
+        Params:
+            type = The type of the declaration.
+    */
+    Node parse_declaration(Node type)
+    {
+        // Get declaration name.
+        consume(TokenKind.Identifier, "expected declaration name.");
+        Token name = scanner.previous;
+
+        // Is it a function?
+        if (match(TokenKind.LeftParenthesis))
+            return parse_function(type, name);
         else
-            node.type = new NodePrimitive(scanner.previous, PrimitiveKind.Void);
-
-        // Parse function body (if not extern).
-        if (is_extern)
         {
-            consume(TokenKind.Semicolon, "expected ';'.");
-            node.block = null;
+            file.error(scanner.current.location, "expected function declaration.");
+            return null;
         }
-        else
-        {
-            consume(TokenKind.LeftBrace, "expected '{'.");
-            node.block = parse_block();
-        }
-
-        // Add node to file.
-        file.nodes ~= node;
     }
 
     /// Parses declarations.
@@ -413,22 +510,20 @@ struct Parser
             // Extern function declaration.
             case TokenKind.Extern:
             {
-                consume(TokenKind.Function, "expected 'function' after 'extern'.");
-                parse_function(true);
+                file.nodes ~= parse_extern_function();
                 break;
             }
 
-            // Function declaration.
-            case TokenKind.Function:
-            {
-                parse_function();
-                break;
-            }
-
-            // Unexpected token.
+            // Try parsing declaration.
             default:
             {
-                file.error(scanner.previous.location, "unexpected token.");
+                Node type = parse_type(scanner.previous);
+
+                if (type !is null)
+                    file.nodes ~= parse_declaration(type);
+                else
+                    file.error(scanner.previous.location, "unexpected token.");
+
                 break;
             }
         }

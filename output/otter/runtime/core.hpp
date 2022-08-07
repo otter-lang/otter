@@ -6,7 +6,7 @@
 using void_t   = void;
 using bool_t   = bool;
 
-struct string_t;
+using string_t = const char *; // temp
 
 using uchar_t  = unsigned char;
 using ubyte_t  = unsigned char;
@@ -26,12 +26,5 @@ using single_t = float;
 using double_t = double;
 
 #define null nullptr;
-
-extern int main_main();
-
-int main()
-{
-    return main_main();
-}
 
 #endif

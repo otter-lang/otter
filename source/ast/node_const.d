@@ -17,8 +17,8 @@ import std.conv;
 class NodeConst : Node
 {
     /// The position of the constant.
-    /// NOTE: const* = a constant pointer.
-    ///       *const = a pointer to a constant.
+    /// NOTE: T *const  = a constant pointer.
+    ///       const T * = a pointer to a constant.
     ConstPosition position;
 
     /// The type that is constant.
@@ -81,7 +81,7 @@ class NodeConst : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
-        if (position == ConstPosition.Right)
+        if (position == ConstPosition.Left)
             return ("const " ~ type.emit(file));
         else
             return (type.emit(file) ~ "const ");

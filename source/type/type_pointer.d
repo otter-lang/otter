@@ -64,11 +64,7 @@ class TypePointer : Type
     */
     override bool is_identical(Type other) 
     {
-        // Allow null.
-        if (other.is_null())
-            return true;
-
-        // *const char == string
+        // const char * == string
         if (base.is_const()                                            && 
             base.get_deconsted_type().get_kind() == PrimitiveKind.Char &&
             other.is_string())

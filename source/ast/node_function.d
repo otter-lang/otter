@@ -117,16 +117,22 @@ class NodeFunction : Node
         file.current_function = file.find_symbol(name.content);
 
         // Generate function head.
-        string function_type = type.emit(file);
+        string function_type = type.emit(file),
+               function_name = "";
 
         // NOTE: if it's the entry point function, 
         // then generate int type.
         if (file.current_namespace.name == "main" &&
             name.content                == "main")
+        {
             function_type = "int ";
+            function_name = "main";
+        }
+        else
+            function_name = file.mangle_name(name.content);
 
         string function_head  = function_type;
-               function_head ~= file.mangle_name(name.content);
+               function_head ~= function_name;
                function_head ~= "(";
 
         foreach (ulong index, ref Node parameter; parameters)

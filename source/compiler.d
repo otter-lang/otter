@@ -48,8 +48,8 @@ struct Compiler
                 if (type.is_const())
                     type = type.get_deconsted_type();
 
-                if (!type.is_integer())
-                    symbol.file.error(symbol.location, "entry point function type must be integer type.");
+                if (!type.is_integer() && !type.is_void())
+                    symbol.file.error(symbol.location, "entry point function type must be integer or void type.");
             }
         }
 

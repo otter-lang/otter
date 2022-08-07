@@ -1,6 +1,10 @@
-extern int puts(const char *h);
+// C function for printing content with
+// line at end to the console.
+extern int puts(const char *content);
 
-void writeln(const char *h)
+// Write content with line at end to the console.
+void writeln(const char *content)
 {
-    puts(h);
+    // Let's use C puts for now.
+    puts(content);
 }

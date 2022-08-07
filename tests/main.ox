@@ -1,7 +1,6 @@
 module main;
 
-int main()
+void main()
 {
-    writeln("HELLO?!");
-    return 0;
+    writeln("Hello, World!");
 }

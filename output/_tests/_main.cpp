@@ -2,6 +2,5 @@
 
 int main(void)
 {
-	global_writeln("HELLO?!");
-	return 0;
+	global_writeln("Hello, World!");
 }

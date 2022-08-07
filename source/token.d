@@ -61,6 +61,9 @@ enum TokenKind : uint
     /// Star character '*'.
     Star,
 
+    /// Arrow '=>'.
+    Arrow,
+
     /// Module keyword 'module'.
     Module,
 

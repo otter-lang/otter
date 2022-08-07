@@ -463,8 +463,21 @@ struct Parser
         }
 
         // Parse function body.
-        consume(TokenKind.LeftBrace, "expected '{'.");
-        node.block = parse_block();
+        if (match(TokenKind.LeftBrace))
+            node.block = parse_block();
+        else if (match(TokenKind.Arrow))
+        {
+            NodeReturn return_node            = new NodeReturn();
+                       return_node.expression = parse_primary(); // TODO: expression parsing
+
+            NodeBlock block_node             = new NodeBlock();
+                      block_node.statements ~= return_node;
+
+            node.block = block_node;
+            consume(TokenKind.Semicolon, "expected ';'.");
+        }
+        else
+            file.error(scanner.current.location, "expected '{' or '=>'.");
 
         return node;
     }

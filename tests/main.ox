@@ -1,7 +1,4 @@
 module main;
 
-void main()
-{
-    writeln("Hello, World!");
-    return;
-}
+void *alloc() => null;
+int main() => 69;

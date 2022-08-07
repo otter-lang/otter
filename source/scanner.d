@@ -385,6 +385,16 @@ struct Scanner
             case '*':
                 return make_token(TokenKind.Star);
 
+            // Arrow?
+            case '=':
+            {
+                // =>
+                if (match('>'))
+                    return make_token(TokenKind.Arrow);
+
+                goto default;
+            }
+
             // String literal.
             case '"':
                 return make_string_token();

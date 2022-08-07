@@ -1,7 +1,11 @@
 #include <_tests/_main.hpp>
 
+void_t *main_alloc(void)
+{
+	return null;
+}
+
 int main(void)
 {
-	global_writeln("Hello, World!");
-	return;
+	return 69;
 }

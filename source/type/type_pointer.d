@@ -69,6 +69,10 @@ class TypePointer : Type
             base.get_deconsted_type().get_kind() == PrimitiveKind.Char &&
             other.is_string())
             return true;
+
+        // any * == null
+        if (other.is_null())
+            return true;
         
         // Make sure both types are pointers 
         // and check them.

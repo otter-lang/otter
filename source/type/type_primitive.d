@@ -158,6 +158,10 @@ class TypePrimitive : Type
         if (is_null() && other.is_null())
             return true;
 
+        // void == void
+        if (is_void() && other.is_void())
+            return true;
+
         // <any integer> == <any integer>
         if (is_integer() && other.is_integer())
             return true;

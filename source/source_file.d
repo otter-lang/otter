@@ -6,7 +6,7 @@ import ast;
 // /
 import diagnostic;
 import file_location;
-import namespace;
+import mod;
 import scanner;
 import symbol;
 import config;
@@ -49,14 +49,11 @@ struct SourceFile
     /// The current function symbol we're emitting/checking.
     Symbol *current_function;
 
-    /// The current namespace we're inside.
-    Namespace *current_namespace;
+    /// The module of the file.
+    Module *mod;
 
     /// The current symbol being used.
     Symbol *current_symbol;
-
-    /// The namespaces being used.
-    Namespace *[]namespaces;
     
     /**
         Default Constructor.
@@ -231,11 +228,11 @@ struct SourceFile
     string mangle_name(string name)
     {
         // Check for symbol.
-        if ((name in current_namespace.symbols) is null)
+        if ((name in mod.symbols) is null)
             return name;
 
         // Mangle symbol (if not extern).
-        Symbol symbol = current_namespace.symbols[name];
+        Symbol symbol = mod.symbols[name];
         return mangle_symbol(&symbol);
     }
 
@@ -255,7 +252,7 @@ struct SourceFile
         if (symbol.kind == SymbolKind.Parameter)
             fprefix = current_function.name ~ "_";
 
-        return (symbol.namespace.name.replace(".", "_") ~ "_" ~ fprefix ~ symbol.name);
+        return (symbol.mod.name.replace(".", "_") ~ "_" ~ fprefix ~ symbol.name);
     }
 
     /** 
@@ -270,7 +267,7 @@ struct SourceFile
 
         // Check for any dot, if there's one then we need to 
         // try finding the symbol globally or locally too 
-        // (because static classes/structures). 
+        // (because static classes/structures and modules). 
         if (name.indexOf('.') != -1)
         {
             // TODO
@@ -278,27 +275,16 @@ struct SourceFile
         }
         // There's no dot, it's a symbol that is local or is in
         // a namespace being used.
-        else if (current_namespace !is null)
+        else if (mod !is null)
         {
             // Try finding the symbol locally first.
-            if ((name in current_namespace.symbols) !is null)
-                current_symbol = (&current_namespace.symbols[name]);
+            if ((name in mod.symbols) !is null)
+                current_symbol = (&mod.symbols[name]);
 
             // Try finding the symbol globally.
-            if ((name in g_namespaces["global"].symbols) !is null)
-                current_symbol = (&g_namespaces["global"].symbols[name]);
+            if ((name in g_modules["global"].symbols) !is null)
+                current_symbol = (&g_modules["global"].symbols[name]);
 
-            // Try finding the symbol inside used namespaces.
-            foreach (Namespace *used_namespace; namespaces)
-            {
-                if ((name in used_namespace.symbols) !is null)
-                {
-                    current_symbol = (&used_namespace.symbols[name]);
-                    break;
-                }
-            }
-
-            // We didn't find this symbol.
             return current_symbol;
         }
         

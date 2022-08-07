@@ -31,11 +31,11 @@ struct Compiler
 	    parser.start();
 
         // Make sure entry point function type is an integer.
-        if ("main" in g_namespaces && 
-            "main" in g_namespaces["main"].symbols)
+        if ("main" in g_modules && 
+            "main" in g_modules["main"].symbols)
         {
             // Get main symbol.
-            Symbol *symbol = (&g_namespaces["main"].symbols["main"]);
+            Symbol *symbol = (&g_modules["main"].symbols["main"]);
 
             // Make sure main is a function.
             if (!symbol.type.is_function())
@@ -84,14 +84,14 @@ struct Compiler
         else
         {
             // Make sure entry point function exists.
-            if ("main" !in g_namespaces)
+            if ("main" !in g_modules)
             {
                 writecln(DiagnosticColor.Error, "error: no entry point namespace 'main' found.");
                 exit(ExitCode.Namespace);
             }
             else 
             {
-                if ("main" !in g_namespaces["main"].symbols)
+                if ("main" !in g_modules["main"].symbols)
                 {
                     writecln(DiagnosticColor.Error, "error: no entry point function 'main' found.");
                     exit(ExitCode.EntryPoint);

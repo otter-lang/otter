@@ -52,12 +52,12 @@ class NodeParameter : Node
     */
     override void define(ref SourceFile file)
     {
-        file.current_namespace.symbols[name.content] =
+        file.mod.symbols[name.content] =
         Symbol
         (
             SymbolKind.Parameter,
             PropertyKind.None,
-            file.current_namespace,
+            file.mod,
             name.content,
             &file,
             name.location,

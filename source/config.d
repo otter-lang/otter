@@ -2,7 +2,7 @@ module config;
 
 // /
 import source_file;
-import namespace;
+import mod;
 
 /// All the exit codes.
 enum ExitCode : int
@@ -35,5 +35,5 @@ __gshared SourceFile[] g_source_files;
 /// The output directory.
 __gshared string g_output_path = "output/";
 
-/// All the namespaces.
-__gshared Namespace[string] g_namespaces;
+/// All the modules.
+__gshared Module[string] g_modules;

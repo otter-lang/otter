@@ -1,4 +1,4 @@
-namespace main;
+module main;
 
 int main()
 {

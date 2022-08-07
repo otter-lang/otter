@@ -12,7 +12,7 @@ public:
     import ast.node_function;
     import ast.node_identifier;
     import ast.node_integer;
-    import ast.node_namespace;
+    import ast.node_module;
     import ast.node_null;
     import ast.node_parameter;
     import ast.node_pointer;

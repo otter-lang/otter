@@ -1,4 +1,4 @@
-module ast.node_namespace;
+module ast.node_module;
 
 // ast/
 import ast.node;
@@ -8,7 +8,7 @@ import type;
 
 // /
 import config;
-import namespace;
+import mod;
 import source_file;
 import token;
 
@@ -16,17 +16,17 @@ import token;
 import std.conv;
 import std.string;
 
-/// A class that represents an Abstract Syntax Tree namespace declaration node.
-class NodeNamespace : Node
+/// A class that represents an Abstract Syntax Tree module declaration node.
+class NodeModule : Node
 {
-    /// The namespace name.
+    /// The module name.
     Node name;
 
     /**
         Default Constructor.
 
         Params:
-            name = The namespace name.
+            name = The module name.
     */
     this(Node name)
     {
@@ -41,20 +41,20 @@ class NodeNamespace : Node
     */
     override void declare(ref SourceFile file)
     {
-        // Get namespace name as string.
-        string namespace_name = name.emit(file);
+        // Get module name as string.
+        string module_name = name.emit(file);
 
-        // Check if namespace exists, if not add it.
-        if ((namespace_name in g_namespaces) is null)
+        // Check if module exists, if not add it.
+        if ((module_name in g_modules) is null)
         {
-            g_namespaces[namespace_name] = Namespace
+            g_modules[module_name] = Module
             (
-                namespace_name
+                module_name
             );
         }
 
-        // We're inside this namespace.
-        file.current_namespace = (&g_namespaces[namespace_name]);
+        // We're inside this module.
+        file.mod = (&g_modules[module_name]);
     }
 
     /**
@@ -65,8 +65,7 @@ class NodeNamespace : Node
     */
     override void define(ref SourceFile file)
     {
-        // We're inside this namespace.
-        file.current_namespace = (&g_namespaces[name.emit(file)]);
+
     }
 
     /**
@@ -77,8 +76,6 @@ class NodeNamespace : Node
     */
     override Type check(ref SourceFile file)
     {
-        // We're inside this namespace.
-        file.current_namespace = (&g_namespaces[name.emit(file)]);
         return null;
     }
 
@@ -91,8 +88,6 @@ class NodeNamespace : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
-        // We're inside this namespace.
-        file.current_namespace = (&g_namespaces[name.emit(file)]);
         return null;
     }
 }

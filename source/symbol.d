@@ -5,7 +5,7 @@ import type;
 
 // /
 import file_location;
-import namespace;
+import mod;
 import source_file;
 
 /// The kind of a symbol.
@@ -40,8 +40,8 @@ struct Symbol
     /// The property of the symbol.
     PropertyKind property;
 
-    /// The namespace the symbol is located.
-    Namespace *namespace;
+    /// The module the symbol is located.
+    Module *mod;
 
     /// The name of the symbol.
     string name;

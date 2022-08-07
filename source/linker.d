@@ -71,8 +71,7 @@ struct Linker
             // Include global namespace files by default.
             foreach (ref SourceFile f; g_source_files)
             {
-                if (f.current_namespace.name == "global" &&
-                    f.path != file.path)
+                if (f.mod.name == "global" && f.path != file.path)
                     header ~= "#include <" ~ get_path(f.path) ~ ".hpp>\n";
             }
 

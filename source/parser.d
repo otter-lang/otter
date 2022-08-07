@@ -8,7 +8,7 @@ import type;
 
 // /
 import file_location;
-import namespace;
+import mod;
 import source_file;
 import scanner;
 import config;
@@ -156,14 +156,14 @@ struct Parser
         return left;
     }
 
-    /// Parse namespace.
-    void parse_namespace()
+    /// Parse module.
+    void parse_module()
     {
-        // Parse namespace name.
+        // Parse module name.
         Node name = parse_name();
 
-        // Add namespace "declaration" node to file.
-        file.nodes ~= new NodeNamespace(name);
+        // Add module "declaration" node to file.
+        file.nodes ~= new NodeModule(name);
 
         // Expect semicolon.
         consume(TokenKind.Semicolon, "expected ';'.");
@@ -500,10 +500,10 @@ struct Parser
         // Check for the previous token.
         switch (scanner.previous.kind)
         {
-            // Namespace.
-            case TokenKind.Namespace:
+            // Module.
+            case TokenKind.Module:
             {
-                parse_namespace();
+                parse_module();
                 break;
             }
 
@@ -533,7 +533,7 @@ struct Parser
     void start()
     {
         // Make global namespace.
-        g_namespaces["global"] = Namespace("global");
+        g_modules["global"] = Module("global");
 
         // Parse every source file.
         foreach (ref SourceFile source; g_source_files)
@@ -546,7 +546,7 @@ struct Parser
 
             // Always have a 'namespace global;' at the
             // top of the file, in case there's no namespace specified.
-            file.nodes ~= new NodeNamespace
+            file.nodes ~= new NodeModule
             (
                 new NodeIdentifier
                 (

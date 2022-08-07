@@ -61,11 +61,11 @@ enum TokenKind : uint
     /// Star character '*'.
     Star,
 
-    /// Namespace keyword 'namespace'.
-    Namespace,
+    /// Module keyword 'module'.
+    Module,
 
-    /// Using keyword 'using'.
-    Using,
+    /// Import keyword 'import'.
+    Import,
 
     /// Extern keyword 'extern'.
     Extern,

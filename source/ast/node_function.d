@@ -7,7 +7,7 @@ import ast;
 import type;
 
 // /
-import namespace;
+import mod;
 import source_file;
 import symbol;
 import token;
@@ -45,12 +45,12 @@ class NodeFunction : Node
         }
 
         // Add symbol to namespace.
-        file.current_namespace.symbols[name.content] = Symbol
+        file.mod.symbols[name.content] = Symbol
         (
             SymbolKind.Function,
             (block is null) ? PropertyKind.Extern : 
                               PropertyKind.None,
-            file.current_namespace,
+            file.mod,
             name.content,
             (&file),
             name.location,
@@ -122,7 +122,7 @@ class NodeFunction : Node
 
         // NOTE: if it's the entry point function, 
         // then generate int type.
-        if (file.current_namespace.name == "main" &&
+        if (file.mod.name == "main" &&
             name.content                == "main")
         {
             function_type = "int ";

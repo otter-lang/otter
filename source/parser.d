@@ -123,8 +123,15 @@ struct Parser
             return new NodeNull(scanner.previous);
 
         // Identifier.
-        if (match(TokenKind.Identifier))
-            return new NodeIdentifier(scanner.previous);
+        if (match(TokenKind.Identifier))    
+        {
+            Node node = new NodeIdentifier(scanner.previous);
+
+            if (match(TokenKind.LeftParenthesis))
+                return parse_call(node, false);
+            else
+                return node;
+        }
 
         // Unexpected token.
         file.error(scanner.current.location, "unexpected token.");
@@ -317,7 +324,9 @@ struct Parser
         }
 
         // Expect semicolon.
-        consume(TokenKind.Semicolon, "expected ';'.");
+        if (is_statement)
+            consume(TokenKind.Semicolon, "expected ';'.");
+
         return node;
     }
 
@@ -468,6 +477,7 @@ struct Parser
         else if (match(TokenKind.Arrow))
         {
             NodeReturn return_node            = new NodeReturn();
+                       return_node.start      = scanner.current;
                        return_node.expression = parse_primary(); // TODO: expression parsing
 
             NodeBlock block_node             = new NodeBlock();

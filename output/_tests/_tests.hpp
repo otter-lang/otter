@@ -3,6 +3,6 @@
 
 #include <otter/runtime/include.hpp>
 
-extern void_t global_test_writeln(void);
+extern void_t global_test(void);
 
 #endif

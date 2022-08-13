@@ -108,21 +108,25 @@ class NodeCall : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
-        file.source ~= expression.emit(file, true);
-        file.source ~= '(';
+        string output;
+
+        output ~= expression.emit(file, true);
+        output ~= '(';
 
         foreach (ulong index, ref Node parameter; parameters)
         {
-            file.source ~= parameter.emit(file, true);
+            output ~= parameter.emit(file, true);
 
             if (index != (cast(int)parameters.length - 1))
-                file.source ~= ", ";
+                output ~= ", ";
         }
 
-        file.source ~= ')';
+        output ~= ')';
 
         if (is_statement)
-            file.source ~= ";\n";
+            file.source ~= (output ~ ";\n");
+        else
+            return output;
 
         return null;
     }

@@ -1,4 +1,6 @@
-void test_writeln()
+void test()
 {
-    writeln("test_writeln(OK)");
+    writeln("------------------");
+    writeln("--  tests here  --");
+    writeln("------------------");
 }

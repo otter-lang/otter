@@ -1,7 +1,9 @@
 #include <_tests/_tests.hpp>
 #include <_tests/_io.hpp>
 
-void_t global_test_writeln(void)
+void_t global_test(void)
 {
-	global_writeln("test_writeln(OK)");
+	global_writeln("------------------");
+	global_writeln("--  tests here  --");
+	global_writeln("------------------");
 }

@@ -47,6 +47,11 @@ struct Linker
         // Get runtime path.
         string runtime_path = (g_output_path ~ "otter/runtime/");
 
+        // Clear output path.
+        // TODO: find a better way.
+        rmdirRecurse(g_output_path);
+        mkdirRecurse(g_output_path);
+
         // Make runtime directories if needed.
         if (!exists(runtime_path))
             mkdirRecurse(runtime_path);
@@ -67,15 +72,7 @@ struct Linker
             string header  = "#ifndef " ~ guard ~ "_HPP\n";
                    header ~= "#define " ~ guard ~ "_HPP\n\n";
                    header ~= "#include <otter/runtime/include.hpp>\n";
-
-            // Include global namespace files by default.
-            foreach (ref SourceFile f; g_source_files)
-            {
-                if (f.mod.name == "global" && f.path != file.path)
-                    header ~= "#include <" ~ get_path(f.path) ~ ".hpp>\n";
-            }
-
-                    header ~= "\n";
+                   header ~= "\n";
                    header ~= file.header;
                    header ~= "\n#endif";
 
@@ -83,8 +80,16 @@ struct Linker
             write(file_path ~ ".hpp", header);
 
             // Generate source file.
-            string source  = "#include <" ~ path ~ ".hpp>\n";
-                   source ~= file.source;
+            string  source  = "#include <" ~ path ~ ".hpp>\n";
+            
+            // Include global namespace files by default.
+            foreach (ref SourceFile f; g_source_files)
+            {
+                if (f.mod.name == "global" && f.path != file.path)
+                    source ~= "#include <" ~ get_path(f.path) ~ ".hpp>\n";
+            }
+
+                    source ~= file.source;
 
             // Remove useless line at end (if there's one).
             if (endsWith(source, "\n"))

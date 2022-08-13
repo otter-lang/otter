@@ -1,4 +1,6 @@
 module main;
 
-void *alloc() => null;
-int main() => 69;
+void main()
+{
+    test_writeln();
+}

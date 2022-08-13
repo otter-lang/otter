@@ -1,5 +1,5 @@
-#ifndef _TESTS__GLOBAL_HPP
-#define _TESTS__GLOBAL_HPP
+#ifndef _TESTS__IO_HPP
+#define _TESTS__IO_HPP
 
 #include <otter/runtime/include.hpp>
 

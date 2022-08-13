@@ -1,11 +1,8 @@
 #include <_tests/_main.hpp>
-
-void_t *main_alloc(void)
-{
-	return null;
-}
+#include <_tests/_io.hpp>
+#include <_tests/_tests.hpp>
 
 int main(void)
 {
-	return 69;
+	global_test_writeln();
 }

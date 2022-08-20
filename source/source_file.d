@@ -274,7 +274,7 @@ struct SourceFile
             return current_symbol;
         }
         // There's no dot, it's a symbol that is local or is in
-        // a namespace being used.
+        // a module being used.
         else if (mod !is null)
         {
             // Try finding the symbol locally first.

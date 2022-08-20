@@ -1,13 +1,11 @@
 module main;
 
-long get_exit_code() => 0;
+// void writeln(const char *a)
+// {
 
-int main()
+// }
+
+void main()
 {
-    writeln("Hello, World!");
-
-    // Start the tests.
-    test();
-
-    return get_exit_code();
+    writeln("hi.");
 }

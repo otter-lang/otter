@@ -9,6 +9,7 @@ import std.conv;
 // 
 import config;
 import source_file;
+import mod;
 
 /// A static structure that represents the linker.
 struct Linker
@@ -20,16 +21,13 @@ struct Linker
         string name = baseName(path);
 
         // Get file directory.
-        string directory = ("_" ~ dirName(path));
+        string directory = ("user/" ~ dirName(path));
 
         // Remove extension from file name.
         name = name[0 .. $ - 3];
 
         // Replace file name dots.
         name = replace(name, ".", "_");
-
-        // Make file path.
-        string file_path = ("_" ~ name);
 
         // Check for directory
         string file_directory = (g_output_path ~ directory);
@@ -38,7 +36,7 @@ struct Linker
             mkdirRecurse(file_directory);
 
         // Return the path.
-        return (directory ~ "/" ~ file_path);
+        return (directory ~ "/" ~ name);
     }
 
     /// Starts linking.
@@ -46,6 +44,9 @@ struct Linker
     {
         // Get runtime path.
         string runtime_path = (g_output_path ~ "otter/runtime/");
+
+        // Get module path.
+        string module_path = (g_output_path ~ "modules/");
 
         // Clear output path.
         // TODO: find a better way.
@@ -59,6 +60,30 @@ struct Linker
         // Write runtime files to output path.
         write(runtime_path ~ "core.hpp",    import("core.hpp"));
         write(runtime_path ~ "include.hpp", import("include.hpp"));
+
+        // Make module directory if needed.
+        if (!exists(module_path))
+            mkdirRecurse(module_path);
+
+        // Write module files to module path;
+        foreach (ref Module mod; g_modules)
+        {
+            // Get module file path.
+            string path = module_path ~ mod.name ~ ".hpp";
+
+            // Generate header file.
+            string guard   = replace(replace(toUpper(path), ".", "_"), "/", "_");
+            string header  = "#ifndef " ~ guard ~ "_HPP\n";
+                   header ~= "#define " ~ guard ~ "_HPP\n\n";
+
+            foreach (ref SourceFile file; mod.files)
+                   header ~= "#include <" ~ get_path(file.path) ~ ".hpp>\n";
+
+                   header ~= "\n#endif";
+
+            // Write header file.
+            write(path, header);
+        }
 
         // Write every file to output path.
         foreach (ref SourceFile file; g_source_files)
@@ -80,16 +105,8 @@ struct Linker
             write(file_path ~ ".hpp", header);
 
             // Generate source file.
-            string  source  = "#include <" ~ path ~ ".hpp>\n";
-            
-            // Include global namespace files by default.
-            foreach (ref SourceFile f; g_source_files)
-            {
-                if (f.mod.name == "global" && f.path != file.path)
-                    source ~= "#include <" ~ get_path(f.path) ~ ".hpp>\n";
-            }
-
-                    source ~= file.source;
+            string source  = "#include <modules/" ~ file.mod.name ~ ".hpp>\n";
+                   source ~= file.source;
 
             // Remove useless line at end (if there's one).
             if (endsWith(source, "\n"))

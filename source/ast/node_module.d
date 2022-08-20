@@ -54,6 +54,7 @@ class NodeModule : Node
         }
 
         // We're inside this module.
+        g_modules[module_name].files ~= file;
         file.mod = (&g_modules[module_name]);
     }
 

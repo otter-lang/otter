@@ -19,6 +19,7 @@ import config;
 import io;
 import linker;
 import symbol;
+import mod;
 
 /// A static structure that represents the compiler.
 struct Compiler
@@ -30,26 +31,38 @@ struct Compiler
         Parser parser;
 	    parser.start();
 
-        // Make sure entry point function type is an integer.
-        if ("main" in g_modules && 
-            "main" in g_modules["main"].symbols)
-        {
-            // Get main symbol.
-            Symbol *symbol = (&g_modules["main"].symbols["main"]);
+        // Find entry point function symbol.
+        Symbol *main_symbol = null;
 
+loop: 
+        foreach (ref Module mod; g_modules)
+        {
+            foreach (ref Symbol sym; mod.symbols)
+            {
+                if (sym.name == "main")
+                {
+                    main_symbol = &sym;
+                    break loop;
+                }
+            }
+        }
+
+        // Make sure entry point function type is an integer.
+        if (main_symbol !is null)
+        {
             // Make sure main is a function.
-            if (!symbol.type.is_function())
-                symbol.file.error(symbol.location, "'main' must be a function.");
+            if (!main_symbol.type.is_function())
+                main_symbol.file.error(main_symbol.location, "'main' must be a function.");
             else
             {
                 // Make sure entry point function type is an integer.
-                Type type = (cast(TypeFunction)symbol.type).type;
+                Type type = (cast(TypeFunction)main_symbol.type).type;
 
                 if (type.is_const())
                     type = type.get_deconsted_type();
 
                 if (!type.is_integer() && !type.is_void())
-                    symbol.file.error(symbol.location, "entry point function type must be integer or void type.");
+                    main_symbol.file.error(main_symbol.location, "entry point function type must be integer or void type.");
             }
         }
 
@@ -84,18 +97,10 @@ struct Compiler
         else
         {
             // Make sure entry point function exists.
-            if ("main" !in g_modules)
+            if (main_symbol is null)
             {
-                writecln(DiagnosticColor.Error, "error: no entry point namespace 'main' found.");
-                exit(ExitCode.Namespace);
-            }
-            else 
-            {
-                if ("main" !in g_modules["main"].symbols)
-                {
-                    writecln(DiagnosticColor.Error, "error: no entry point function 'main' found.");
-                    exit(ExitCode.EntryPoint);
-                }    
+                writecln(DiagnosticColor.Error, "error: no entry point function 'main' found.");
+                exit(ExitCode.EntryPoint);
             }
 
             writecln(color, "Build " ~ status ~ " with no diagnostic.");

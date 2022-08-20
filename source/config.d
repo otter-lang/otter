@@ -16,9 +16,6 @@ enum ExitCode : int
     /// Failed to parse command line argument.
     CommandLine,
 
-    /// No entry point namespace found.
-    Namespace,
-
     /// No entry point function found.
     EntryPoint,
 }

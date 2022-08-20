@@ -122,8 +122,7 @@ class NodeFunction : Node
 
         // NOTE: if it's the entry point function, 
         // then generate int type.
-        if (file.mod.name == "main" &&
-            name.content                == "main")
+        if (name.content == "main")
         {
             function_type = "int ";
             function_name = "main";

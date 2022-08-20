@@ -1,5 +1,3 @@
-module main;
-
 // void writeln(const char *a)
 // {
 

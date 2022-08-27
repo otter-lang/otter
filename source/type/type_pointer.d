@@ -73,6 +73,14 @@ class TypePointer : Type
         // any * == null
         if (other.is_null())
             return true;
+
+        // void * == any *
+        if (other.is_pointer() && other.get_derefed_type().get_kind() == PrimitiveKind.Void)
+            return true;
+
+        // any * == void *
+        if (base.get_kind() == PrimitiveKind.Void)
+            return true;
         
         // Make sure both types are pointers 
         // and check them.
@@ -94,6 +102,6 @@ class TypePointer : Type
     /// Get the name of the type.
     override string get_name() 
     {
-        return ("*" ~ base.get_name());
+        return (base.get_name() ~ "*");
     }
 }

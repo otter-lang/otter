@@ -60,6 +60,9 @@ enum TokenKind : uint
 
     /// Star character '*'.
     Star,
+    
+    /// Equal '='.
+    Equal,
 
     /// Arrow '=>'.
     Arrow,

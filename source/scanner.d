@@ -385,14 +385,15 @@ struct Scanner
             case '*':
                 return make_token(TokenKind.Star);
 
-            // Arrow?
+            // = =>
             case '=':
             {
                 // =>
                 if (match('>'))
                     return make_token(TokenKind.Arrow);
 
-                goto default;
+                // =
+                return make_token(TokenKind.Equal);
             }
 
             // String literal.

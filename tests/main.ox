@@ -1,9 +1,7 @@
-// void writeln(const char *a)
-// {
+int magic() => 0;
 
-// }
-
-void main()
+int main()
 {
-    writeln("hi.");
+    int code = magic();
+    return code;
 }

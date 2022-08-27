@@ -8,6 +8,7 @@ public:
     import ast.node_bool;
     import ast.node_call;
     import ast.node_const;
+    import ast.node_declaration;
     import ast.node_float;
     import ast.node_function;
     import ast.node_identifier;

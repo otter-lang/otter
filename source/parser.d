@@ -330,6 +330,26 @@ struct Parser
         return node;
     }
 
+    /// Parse variable declaration.
+    Node parse_variable_declaration(Node type)
+    {
+        NodeDeclaration node      = new NodeDeclaration();
+                        node.type = type;
+
+        // Parse variable name.
+        consume(TokenKind.Identifier, "expected variable name after type.");
+        node.name = scanner.previous;
+
+        // Parse variable value.
+        if (match(TokenKind.Equal))
+            node.value = parse_primary();
+        else
+            node.value = null;
+
+        consume(TokenKind.Semicolon, "expected ';'.");
+        return node;
+    }
+
     /// Parse identifier.
     Node parse_identifier()
     {
@@ -343,6 +363,17 @@ struct Parser
                 new NodeIdentifier(identifier),
                 true
             );
+        }
+
+        // Declaration?
+        else
+        {
+            Node type = parse_type(identifier);
+
+            if (type !is null)
+                return parse_variable_declaration(type);
+            else
+                file.error(identifier.location, "unexpected token.");
         }
 
         return null;

@@ -23,7 +23,9 @@ class NodeBlock : Node
     */
     override void declare(ref SourceFile file)
     {
-
+        // Declare every statement inside the block.
+        foreach (ref Node statement; statements)
+            statement.declare(file);
     }
 
     /**
@@ -34,7 +36,9 @@ class NodeBlock : Node
     */
     override void define(ref SourceFile file)
     {
-
+        // Define every statement inside the block.
+        foreach (ref Node statement; statements)
+            statement.define(file);
     }
 
     /**

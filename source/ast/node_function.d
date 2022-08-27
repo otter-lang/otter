@@ -55,6 +55,10 @@ class NodeFunction : Node
             (&file),
             name.location,
         );
+
+        // Declare local variables.
+        if (block !is null)
+            block.declare(file);
     }
 
     /**
@@ -84,6 +88,10 @@ class NodeFunction : Node
         // Define parameter symbols.
         foreach (ref Node parameter; parameters)
             parameter.define(file);
+
+        // Define local variables.
+        if (block !is null)
+            block.define(file);
     }
 
     /**

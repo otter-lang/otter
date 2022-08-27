@@ -3,6 +3,7 @@
 
 #include <otter/runtime/include.hpp>
 
+extern int_t global_magic(void);
 extern int main(void);
 
 #endif

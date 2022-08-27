@@ -249,7 +249,8 @@ struct SourceFile
 
         string fprefix = "";
 
-        if (symbol.kind == SymbolKind.Parameter)
+        if (symbol.kind == SymbolKind.Parameter ||
+            symbol.kind == SymbolKind.Variable)
             fprefix = current_function.name ~ "_";
 
         return (symbol.mod.name.replace(".", "_") ~ "_" ~ fprefix ~ symbol.name);

@@ -1,1 +1,1 @@
-./oc tests/*.ox; g++ output/user/**/*.cpp -I output/ && ./a.out; echo Exit code: $?
+./oc tests/*.ox; g++ output/user/**/*.cpp -w -I output/ && ./a.out; echo Exit code: $?

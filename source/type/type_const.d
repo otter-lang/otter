@@ -105,8 +105,8 @@ class TypeConst : Type
     override string get_name() 
     {
         if (position == ConstPosition.Right)
-            return ("const " ~ type.get_name());
-        else
             return (type.get_name() ~ "const ");
+        else
+            return ("const " ~ type.get_name());
     }
 }

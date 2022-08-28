@@ -1,8 +1,6 @@
 #ifndef OTTER_RUNTIME_CORE_HPP
 #define OTTER_RUNTIME_CORE_HPP
 
-#include <cstdint>
-
 using void_t   = void;
 using bool_t   = bool;
 

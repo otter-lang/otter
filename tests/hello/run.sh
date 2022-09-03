@@ -1,1 +1,1 @@
-./oc tests/hello/main.ox tests/library/**/**/*.ox tests/library/**/*.ox; g++ output/user/tests/hello/main.cpp output/user/tests/library/**/**/*.cpp output/user/tests/library/**/*.cpp -w -I output/ && ./a.out; echo Exit code: $?
+./oc tests/library tests/hello/; g++ output/user/tests/hello/main.cpp output/user/tests/library/**/**/*.cpp output/user/tests/library/**/*.cpp -w -I output/ && ./a.out; echo Exit code: $?

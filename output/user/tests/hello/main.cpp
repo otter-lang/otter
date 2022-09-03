@@ -3,5 +3,5 @@
 
 int main(void)
 {
-	std_console_writeln("Hello, World!!");
+	std_console_writeln("Hello, World!");
 }

@@ -2,6 +2,7 @@
 import core.stdc.stdlib;
 import std.algorithm;
 import std.stdio;
+import std.file;
 
 // /
 import source_file;
@@ -76,6 +77,16 @@ bool parse_command_line_arguments(string[] arguments)
 			// Check if it's a source file, if not just ignore it.
 			if (argument.endsWith(".ox"))
 				g_source_files ~= SourceFile(argument);
+
+			// Now check if it's a directory.
+			else if (isDir(argument))
+			{
+				foreach (string name; dirEntries(argument, SpanMode.breadth))
+				{
+					if (name.endsWith(".ox"))
+						g_source_files ~= SourceFile(name);
+				}
+			}
 		}
 	}
 

@@ -1,1 +1,0 @@
-./oc tests/*.ox; g++ output/user/**/*.cpp -w -I output/ && ./a.out; echo Exit code: $?

@@ -1,7 +1,8 @@
 #ifndef OUTPUT_MODULES_GLOBAL_HPP
 #define OUTPUT_MODULES_GLOBAL_HPP
 
-#include <user/tests/main.hpp>
-#include <user/tests/test.hpp>
+#include <user/tests/hello/main.hpp>
+#include <user/tests/library/std/c/stdio.hpp>
+#include <user/tests/library/std/console.hpp>
 
 #endif

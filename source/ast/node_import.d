@@ -1,4 +1,4 @@
-module ast.node_identifier;
+module ast.node_import;
 
 // ast/
 import ast.node;
@@ -7,26 +7,30 @@ import ast.node;
 import type;
 
 // /
+import config;
+import mod;
 import source_file;
-import symbol;
 import token;
 
-/// A class that represents an Abstract Syntax Tree an identifier name node.
-class NodeIdentifier : Node
+// standard
+import std.conv;
+import std.string;
+
+/// A class that represents an Abstract Syntax Tree import statement node.
+class NodeImport : Node
 {
-    /// The identifier token.
-    Token identifier;
+    /// The module name.
+    Node name;
 
     /**
         Default Constructor.
 
         Params:
-            identifier = The identifier token.
+            name = The module name.
     */
-    this(Token identifier)
+    this(Node name)
     {
-        this.start      = identifier;
-        this.identifier = identifier;
+        this.name = name;
     }
 
     /**
@@ -37,7 +41,7 @@ class NodeIdentifier : Node
     */
     override void declare(ref SourceFile file)
     {
-
+        
     }
 
     /**
@@ -48,7 +52,18 @@ class NodeIdentifier : Node
     */
     override void define(ref SourceFile file)
     {
-        
+        // Get module name as string.
+        string name_string = name.emit(file);
+
+        // Make sure module exists
+        if ((name_string in g_modules) is null)
+        {
+            file.error(name.start.location, "this module doesn't exist.");
+            return;
+        }
+
+        // Add module to file imports.
+        file.imports ~= &(g_modules[name_string]);
     }
 
     /**
@@ -59,13 +74,6 @@ class NodeIdentifier : Node
     */
     override Type check(ref SourceFile file)
     {
-        Symbol *symbol = file.find_symbol(identifier.content);
-
-        if (symbol !is null)
-            return symbol.type;
-        else
-            file.fatal(identifier.location, "this symbol doesn't exist.");
-
         return null;
     }
 
@@ -78,10 +86,6 @@ class NodeIdentifier : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
-        Symbol *symbol = file.find_symbol(identifier.content);
-        string    name = identifier.content;
-
-        return (mangle) ? file.mangle_symbol(symbol)
-                        : name;
+        return null;
     }
 }

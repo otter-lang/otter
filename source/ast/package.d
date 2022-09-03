@@ -12,6 +12,7 @@ public:
     import ast.node_float;
     import ast.node_function;
     import ast.node_identifier;
+    import ast.node_import;
     import ast.node_integer;
     import ast.node_module;
     import ast.node_null;

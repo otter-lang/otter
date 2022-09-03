@@ -18,6 +18,7 @@ import std.stdio;
 import std.file;
 import std.conv;
 import std.array;
+import core.stdc.stdlib;
 
 /// A structure that represents a source file.
 struct SourceFile
@@ -54,6 +55,12 @@ struct SourceFile
 
     /// The current symbol being used.
     Symbol *current_symbol;
+
+    /// The modules imported.
+    Module *[] imports;
+
+    /// TODO: ?
+    Symbol[string][string] locals;
     
     /**
         Default Constructor.
@@ -135,6 +142,33 @@ struct SourceFile
 
         // Increase diagnostic amount.
         ++g_diagnostic_amount;
+    }
+
+    /**
+        Shows error and exits the program.
+
+        Params:
+            location = The file location of where the diagnostic points to.
+            message  = The message of the diagnostic.
+    */
+    void fatal(FileLocation location, string message)
+    {
+        diagnostics ~= Diagnostic
+        (
+            DiagnosticKind.Error, 
+            message,
+            location,
+        );
+
+        // Set global had fatal error to true.
+        g_had_fatal_error = true;
+
+        // Increase diagnostic amount.
+        ++g_diagnostic_amount;
+
+        // Write the diagnostics to screen and exit.
+        write_diagnostics();
+        exit(ExitCode.Failure);
     }
 
     /// Write diagnostics to console.
@@ -227,13 +261,14 @@ struct SourceFile
     */
     string mangle_name(string name)
     {
-        // Check for symbol.
-        if ((name in mod.symbols) is null)
+        // Check for symbol and mangle it if possible.
+        if ((name in mod.symbols) !is null)
+            return mangle_symbol(&mod.symbols[name]);
+        else if (current_function                      !is null && 
+                 (name in locals[current_function.name]) !is null)
+            return mangle_symbol(&locals[current_function.name][name]);
+        else
             return name;
-
-        // Mangle symbol (if not extern).
-        Symbol symbol = mod.symbols[name];
-        return mangle_symbol(&symbol);
     }
 
     /** 
@@ -282,9 +317,21 @@ struct SourceFile
             if ((name in mod.symbols) !is null)
                 current_symbol = (&mod.symbols[name]);
 
+            if (current_function !is null &&
+                (current_function.name in locals) !is null &&
+                (name in locals[current_function.name]) !is null)
+                current_symbol = (&locals[current_function.name][name]);
+
             // Try finding the symbol globally.
             if ((name in g_modules["global"].symbols) !is null)
                 current_symbol = (&g_modules["global"].symbols[name]);
+
+            // Try finding the symbol in an imported module.
+            foreach (Module *mod; imports)
+            {
+                if ((name in mod.symbols) !is null)
+                    current_symbol = (&mod.symbols[name]);
+            }
 
             return current_symbol;
         }

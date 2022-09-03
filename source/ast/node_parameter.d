@@ -52,7 +52,7 @@ class NodeParameter : Node
     */
     override void define(ref SourceFile file)
     {
-        file.mod.symbols[name.content] =
+        file.locals[file.current_function.name][name.content] =
         Symbol
         (
             SymbolKind.Parameter,

@@ -163,7 +163,7 @@ struct Parser
         return left;
     }
 
-    /// Parse module.
+    /// Parse module declaration.
     void parse_module()
     {
         // Parse module name.
@@ -171,6 +171,19 @@ struct Parser
 
         // Add module "declaration" node to file.
         file.nodes ~= new NodeModule(name);
+
+        // Expect semicolon.
+        consume(TokenKind.Semicolon, "expected ';'.");
+    }
+
+    /// Parse import statement.
+    void parse_import()
+    {
+        // Parse module name.
+        Node name = parse_name();
+
+        // Add import statement node to file.
+        file.nodes ~= new NodeImport(name);
 
         // Expect semicolon.
         consume(TokenKind.Semicolon, "expected ';'.");
@@ -554,10 +567,17 @@ struct Parser
         // Check for the previous token.
         switch (scanner.previous.kind)
         {
-            // Module.
+            // Module declaration.
             case TokenKind.Module:
             {
                 parse_module();
+                break;
+            }
+
+            // Import statement.
+            case TokenKind.Import:
+            {
+                parse_import();
                 break;
             }
 

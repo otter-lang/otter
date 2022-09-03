@@ -70,7 +70,7 @@ class NodeFunction : Node
     override void define(ref SourceFile file)
     {
         // Get function symbol.
-        Symbol *symbol = file.find_symbol(name.content);
+        file.current_function = file.find_symbol(name.content);
 
         // Make function type.
         TypeFunction function_type = new TypeFunction();
@@ -83,7 +83,7 @@ class NodeFunction : Node
             function_type.parameters ~= parameter.check(file);
 
         // Set type to symbol.
-        symbol.type = function_type;
+        file.current_function.type = function_type;
 
         // Define parameter symbols.
         foreach (ref Node parameter; parameters)

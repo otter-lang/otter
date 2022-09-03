@@ -66,7 +66,8 @@ class NodeModule : Node
     */
     override void define(ref SourceFile file)
     {
-
+        // We're inside this module.
+        file.mod = (&g_modules[name.emit(file)]);
     }
 
     /**
@@ -77,6 +78,8 @@ class NodeModule : Node
     */
     override Type check(ref SourceFile file)
     {
+        // We're inside this module.
+        file.mod = (&g_modules[name.emit(file)]);
         return null;
     }
 
@@ -89,6 +92,8 @@ class NodeModule : Node
     */
     override string emit(ref SourceFile file, bool mangle = false)
     {
+        // We're inside this module.
+        file.mod = (&g_modules[name.emit(file)]);
         return null;
     }
 }

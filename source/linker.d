@@ -73,8 +73,8 @@ struct Linker
 
             // Generate header file.
             string guard   = replace(replace(toUpper(path), ".", "_"), "/", "_");
-            string header  = "#ifndef " ~ guard ~ "_HPP\n";
-                   header ~= "#define " ~ guard ~ "_HPP\n\n";
+            string header  = "#ifndef " ~ guard ~ "\n";
+                   header ~= "#define " ~ guard ~ "\n\n";
 
             foreach (ref SourceFile file; mod.files)
                    header ~= "#include <" ~ get_path(file.path) ~ ".hpp>\n";
@@ -106,6 +106,10 @@ struct Linker
 
             // Generate source file.
             string source  = "#include <modules/" ~ file.mod.name ~ ".hpp>\n";
+
+            foreach (Module *mod; file.imports)
+                   source ~= "#include <modules/" ~ mod.name ~ ".hpp>\n";
+
                    source ~= file.source;
 
             // Remove useless line at end (if there's one).

@@ -16,3 +16,6 @@ oc-test-*
 
 # Testing
 a.out
+
+# Output
+output/

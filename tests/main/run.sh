@@ -1,0 +1,1 @@
+./oc tests/main/; g++ output/user/tests/main/main.cpp -w -I output/ && ./a.out; echo Exit code: $?

@@ -68,9 +68,21 @@ public class Emitter
 		}
 	}
 
+	private void EmitReturn(NodeReturn node)
+	{
+		File.Source += "return;\n";
+	}
+
 	private void EmitStatement(Node node)
 	{
-
+		switch (node)
+		{
+			case NodeReturn _return:
+			{
+				EmitReturn(_return);
+				break;
+			}
+		}
 	}
 
 	private void Emit(NodeFunction node)
@@ -93,7 +105,7 @@ public class Emitter
 
 		// Write function body.
 		++TabCount;
-		File.Source += "\n{";
+		File.Source += "\n{\n";
 
 		switch (node.Body)
 		{
@@ -116,7 +128,7 @@ public class Emitter
 			}
 		}
 
-		File.Source += "\n}\n";
+		File.Source += "}\n";
 		--TabCount;
 	}
 

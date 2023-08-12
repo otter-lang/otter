@@ -1,4 +1,4 @@
-public class DeclarePass : Pass 
+public class DeclarePass 
 {
 	public SourceFile File;
 
@@ -22,7 +22,7 @@ public class DeclarePass : Pass
 		File.Module = module;
 	}
 
-	public override void Start()
+	public void Start()
 	{
 		foreach (SourceFile file in Globals.SourceFiles)
 		{

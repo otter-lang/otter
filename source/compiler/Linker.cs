@@ -1,4 +1,4 @@
-public class CLinker : Pass 
+public class Linker 
 {
 	private string GetPath(string path)
 	{
@@ -23,7 +23,7 @@ public class CLinker : Pass
 		return (directory + '/' + fileName);
 	}
 
-	public override void Start()
+	public void Start()
 	{
 		// Clear output directory.
 		if (Directory.Exists(Globals.Path))
@@ -82,7 +82,7 @@ public class CLinker : Pass
 
 			// TODO: runtime include.
 
-			header += file.Results[0];
+			header += file.Header;
 			header += "\n#endif";
 
 			// Write header file.
@@ -97,7 +97,7 @@ public class CLinker : Pass
 				source += $"#include <modules/{module.Name}.hpp>\n";
 
 			source += "\n";
-			source += file.Results[1];
+			source += file.Source;
 
 			// Write source file.
 			File.WriteAllText(outputPath + ".cpp", source);

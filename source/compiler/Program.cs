@@ -2,11 +2,11 @@
 Globals.SourceFiles.Add(new("tests/main.ox"));
 Globals.SourceFiles.Add(new("tests/other.ox"));
 
-Pass parser = new Parser();
+Parser parser = new Parser();
 parser.Start();
 
-Pass emitter = new CEmitter();
+Emitter emitter = new Emitter();
 emitter.Start();
 
-Pass linker = new CLinker();
+Linker linker = new Linker();
 linker.Start();

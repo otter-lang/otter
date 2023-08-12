@@ -1,4 +1,4 @@
-public class Parser : Pass
+public class Parser
 {
 	public SourceFile SourceFile;
 	public Scanner    Scanner;
@@ -251,7 +251,7 @@ public class Parser : Pass
 		}
 	}
 
-	public override void Start()
+	public void Start()
 	{
 		// Get global module.
 		Module globalModule = Globals.Modules["global"];
@@ -272,7 +272,7 @@ public class Parser : Pass
 		}
 
 		// Declare pass.
-		Pass declarePass = new DeclarePass();
+		DeclarePass declarePass = new DeclarePass();
 		declarePass.Start();
 	}
 }

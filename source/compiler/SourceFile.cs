@@ -2,23 +2,25 @@ using System.Text;
 
 public class SourceFile
 {
-	public string           Path;
-	public string              Source;
+	public string              Path;
+	public string              Content;
 	public Scanner             Scanner;
 	public Module              Module;
 	public List<Diagnostic>    Diagnostics;
 	public List<Node>          Nodes;
-	public List<StringBuilder> Results;
 	public List<Module>        Imports;
+	public string              Header;
+	public string              Source;
 
 	public SourceFile(string path)
 	{
 		Path        = path;
-		Source      = File.ReadAllText(path);
-		Scanner     = new(Source);
+		Content     = File.ReadAllText(path);
+		Scanner     = new(Content);
 		Diagnostics = new();
 		Nodes       = new();
-		Results     = new();
 		Imports     = new();
+		Header      = "";
+		Source      = "";
 	}
 }

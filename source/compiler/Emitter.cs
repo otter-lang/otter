@@ -1,12 +1,9 @@
 using System.Text;
 
-public class CEmitter : Pass
+public class Emitter
 {
-	public int           TabCount;
-	public SourceFile    File;
-	public StringBuilder Header;
-	public StringBuilder Source;
-
+	public int        TabCount;
+	public SourceFile File;
 
 	private string EmitType(Node node)
 	{
@@ -22,23 +19,16 @@ public class CEmitter : Pass
 
 	private void Emit(NodeFunction node)
 	{
-		Source.Append($"{EmitType(node.Type)} {node.Name.Content}");
+		File.Source += $"{EmitType(node.Type)} {node.Name.Content}";
 	}
 
-	public override void Start()
+	public void Start()
 	{
 		foreach (SourceFile file in Globals.SourceFiles)
 		{
 			TabCount = 0;
-
-			File = file;
+			File     = file;
 			
-			file.Results.Add(new());
-			Header = file.Results[0];
-
-			file.Results.Add(new());
-			Source = file.Results[1];
-
 			foreach (Node node in file.Nodes)
 			{
 				switch (node)

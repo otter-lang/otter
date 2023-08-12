@@ -99,6 +99,10 @@ public class Linker
 			source += "\n";
 			source += file.Source;
 
+			// Formatting: Remove unnecessary newline at end.
+			if (source.EndsWith("\n"))
+				source = source.Substring(0, source.Length - 1); 		
+
 			// Write source file.
 			File.WriteAllText(outputPath + ".cpp", source);
 		}

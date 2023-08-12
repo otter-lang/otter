@@ -1,21 +1,3 @@
-# DUB Cache
-.dub
-
-# Binaries
-oc
-oc.so
-oc.dylib
-oc.dll
-oc.a
-oc.lib
-oc-test-*
-*.exe
-*.o
-*.obj
-*.lst
-
-# Testing
-a.out
-
-# Output
-output/
+bin
+obj
+output

@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 public class Emitter
@@ -15,6 +16,34 @@ public class Emitter
 			result += '\t';
 
 		return result;
+	}
+
+	private Symbol GetSymbol(string name)
+	{
+		// Local module?
+		if (File.Module.Symbols.ContainsKey(name))
+			return File.Module.Symbols[name];
+
+		// Imported module?
+		foreach (Module module in File.Imports)
+		{
+			if (module.Symbols.ContainsKey(name))
+				return module.Symbols[name];
+		}
+
+		return null;
+	}
+
+	private string MangleName(string name)
+	{
+		// Get symbol.
+		Symbol symbol = GetSymbol(name);
+
+		if (symbol == null) // TODO: improve this.
+			return "<internal error>";
+
+		// Mangle symbol.
+		return $"{symbol.Module.Name.Replace(".", "_")}_{name}";
 	}
 
 	private string PrimitiveKindToString(PrimitiveKind kind)
@@ -87,6 +116,9 @@ public class Emitter
 
 	private void Emit(NodeFunction node)
 	{
+		// Mangle function name.
+		string functionName = MangleName(node.Name.Content);
+
 		// Formatting: avoid having a newline after a #include.
 		if (!EmittedFunction)
 			EmittedFunction = true;
@@ -97,11 +129,11 @@ public class Emitter
 		}
 
 		// Write function declaration.
-		File.Header += $"extern {TypeToString(node.Type)} {node.Name.Content}();\n";
+		File.Header += $"extern {TypeToString(node.Type)} {functionName}();\n";
 
 		// Write function definition.
 		// TODO: function parameters.	
-		File.Source += $"{TypeToString(node.Type)} {node.Name.Content}()";
+		File.Source += $"{TypeToString(node.Type)} {functionName}()";
 
 		// Write function body.
 		++TabCount;
@@ -139,11 +171,19 @@ public class Emitter
 			TabCount        = 0;
 			File            = file;
 			EmittedFunction = false;
+
+			File.Module = Globals.Modules["global"];
 			
 			foreach (Node node in file.Nodes)
 			{
 				switch (node)
 				{
+					case NodeModule module:
+					{
+						File.Module = Globals.Modules[module.Name.GetString()];
+						break;
+					}
+
 					case NodeFunction function:
 					{
 						Emit(function);

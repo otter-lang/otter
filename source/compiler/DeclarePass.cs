@@ -1,6 +1,8 @@
 public class DeclarePass 
 {
 	public SourceFile File;
+	
+	private bool AlreadyDeclaredModule;
 
 	private void Declare(NodeModule node)
 	{
@@ -18,8 +20,29 @@ public class DeclarePass
 		// Add current file to module.
 		module.Files.Add(File);
 
+		// Add previous module to imports.
+		if (AlreadyDeclaredModule)
+			File.Imports.Add(File.Module);	
+
 		// Set file module.
 		File.Module = module;
+
+		if (!AlreadyDeclaredModule)
+			AlreadyDeclaredModule = true;
+	}
+
+	private void Declare(NodeFunction node)
+	{
+		// Build function symbol.
+		Symbol symbol = new()
+		{
+			Module = File.Module,
+			Type   = null,
+			Name   = node.Name.Content,
+		};
+
+		// Add function symbol to file module.
+		File.Module.Symbols.Add(node.Name.Content, symbol);
 	}
 
 	public void Start()
@@ -29,7 +52,8 @@ public class DeclarePass
 			bool foundModule = false;
 			bool foundBefore = false;
 
-			File = file;
+			File                  = file;
+			AlreadyDeclaredModule = false;
 
 			foreach (Node node in file.Nodes)
 			{
@@ -39,6 +63,12 @@ public class DeclarePass
 					{
 						foundModule = true;
 						Declare(module);
+						break;
+					}
+
+					case NodeFunction function:
+					{
+						Declare(function);
 						break;
 					}
 

@@ -1,7 +1,8 @@
 public class Type
 {
-	public virtual string GetName() => null;
-	public virtual int    GetSize() => 0;
+	public virtual PrimitiveKind GetKind() => PrimitiveKind.Void;
+	public virtual string        GetName() => null;
+	public virtual int           GetSize() => 0;
 
 	public virtual bool IsUnsigned() => false;
 	public virtual bool IsInteger () => false;
@@ -33,8 +34,9 @@ public enum PrimitiveKind
 public class TypePrimitive : Type
 {
 	public PrimitiveKind Kind;
-	
-	public override string GetName() => Kind.ToString().ToLower();
+
+    public override PrimitiveKind GetKind() => Kind;
+    public override string        GetName() => Kind.ToString().ToLower();
 
 	public override int GetSize()
 	{

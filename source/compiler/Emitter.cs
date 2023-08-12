@@ -36,6 +36,10 @@ public class Emitter
 
 	private string MangleName(string name)
 	{
+		// Check for main function.
+		if (name == "main") // TODO: force 'main' to be a function. 
+			return "main";
+
 		// Get symbol.
 		Symbol symbol = GetSymbol(name);
 

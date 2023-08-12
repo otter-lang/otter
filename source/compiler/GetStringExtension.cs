@@ -16,7 +16,7 @@ public static class GetStringExtension
 
 	public static string GetString(this NodeIdentifier node)
 	{
-		return node.Token.Content;
+		return node.Token.Content.ToLower();
 	}
 
 	public static string GetString(this NodeDot node)

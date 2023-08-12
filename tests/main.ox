@@ -3,7 +3,7 @@ void main()
     return;
 }
 
-module test;
+module tesT;
 
 int add()
 {

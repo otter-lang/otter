@@ -1,8 +1,0 @@
-{
-    "dscanner.ignoredKeys": [
-        "dscanner.unused_result",
-        "dscanner.confusing.function_attributes",
-        "dscanner.confusing.function_attributes"
-    ],
-    "C_Cpp.errorSquiggles": "Disabled"
-}

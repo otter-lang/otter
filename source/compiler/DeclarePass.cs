@@ -21,7 +21,7 @@ public class DeclarePass
 		module.Files.Add(File);
 
 		// Add previous module to imports.
-		if (AlreadyDeclaredModule)
+		if (AlreadyDeclaredModule && !File.Imports.Contains(File.Module))
 			File.Imports.Add(File.Module);	
 
 		// Set file module.

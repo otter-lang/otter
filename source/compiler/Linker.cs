@@ -91,8 +91,6 @@ public class Linker
 			// Generate source file.
 			string source = "";
 
-			source += $"#include <modules/{file.Module.Name}.hpp>\n";
-
 			foreach (Module module in file.Imports)
 				source += $"#include <modules/{module.Name}.hpp>\n";
 

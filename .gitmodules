@@ -1,0 +1,6 @@
+[submodule "ir"]
+	path = ir
+	url = https://github.com/otter-lang/ir
+[submodule "source/ir"]
+	path = source/ir
+	url = https://github.com/otter-lang/ir

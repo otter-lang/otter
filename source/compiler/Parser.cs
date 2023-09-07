@@ -188,12 +188,13 @@ public class Parser
 
 	private Node ParseModuleDeclaration()
 	{
-		NodeModule node = new();
+        NodeModule node = new()
+        {
+            // Parse module name.
+            Name = ParseIdentifier()
+        };
 
-		// Parse module name.
-		node.Name = ParseIdentifier();
-
-		Consume(TokenKind.Semicolon, "expected ';'.");
+        Consume(TokenKind.Semicolon, "expected ';'.");
 		return node;
 	}
 

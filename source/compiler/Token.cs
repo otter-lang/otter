@@ -4,7 +4,9 @@ public enum TokenKind
 	Error,
 
 	Identifier,
-	Number,
+	Integer,
+	Float,
+	String,
 
 	LeftParenthesis,
 	RightParenthesis,
@@ -13,11 +15,15 @@ public enum TokenKind
 	Semicolon,
 	Dot,
 
+	True,
+	False,
+	Null,
+
 	Module,
 
 	Void,
 	Bool,
-	String,
+	StringType,
 
 	UByte,
 	UShort,

@@ -43,9 +43,29 @@ public class NodeBlock : Node
 	public List<Node> Statements;
 }
 
-public class NodeNumber : Node
+public class NodeFloat : Node
 {
-	public Token Value;
+	public double Value;
+}
+
+public class NodeInteger : Node
+{
+	public long Value;
+}
+
+public class NodeString : Node
+{
+	public string Value;
+}
+
+public class NodeBool : Node
+{
+	public bool Value;
+}
+
+public class NodeNull : Node
+{
+	
 }
 
 public class NodeReturn : Node 

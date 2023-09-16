@@ -101,9 +101,35 @@ public class Emitter
 		}
 	}
 
+	private void EmitExpression(Node node)
+	{
+		switch (node)
+		{
+			case NodeNull:
+			{
+				File.Source += "nullptr";
+				break;
+			}
+
+			default:
+			{
+				File.Source += node.Token.Content;
+				break;
+			}
+		}
+	}
+
 	private void EmitReturn(NodeReturn node)
 	{
-		File.Source += "return;\n";
+		File.Source += "return";
+
+		if (node.Value != null)
+		{
+			File.Source += ' ';
+			EmitExpression(node.Value);			
+		}
+
+		File.Source += ";\n";
 	}
 
 	private void EmitStatement(Node node)

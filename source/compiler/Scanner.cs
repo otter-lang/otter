@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 public class Scanner
 {
 	public string Source;
@@ -9,25 +11,29 @@ public class Scanner
 
 	public Dictionary<string, TokenKind> Keywords = new()
 	{
-		{ "module", TokenKind.Module },
+		{ "true",   TokenKind.True       },
+		{ "false",  TokenKind.False      },
+		{ "null",   TokenKind.Null       },
 
-		{ "void",   TokenKind.Void   },
-		{ "bool",   TokenKind.Bool   },
-		{ "string", TokenKind.String },
+		{ "module", TokenKind.Module     },
 
-		{ "ubyte",  TokenKind.UByte  },
-		{ "ushort", TokenKind.UShort },
-		{ "uint",   TokenKind.UInt   },
-		{ "ulong",  TokenKind.ULong  },
-		{ "byte",   TokenKind.Byte   },
-		{ "short",  TokenKind.Short  },
-		{ "int",    TokenKind.Int    },
-		{ "long",   TokenKind.Long   },
+		{ "void",   TokenKind.Void       },
+		{ "bool",   TokenKind.Bool       },
+		{ "string", TokenKind.StringType },
 
-		{ "single", TokenKind.Single },
-		{ "double", TokenKind.Double },
+		{ "ubyte",  TokenKind.UByte      },
+		{ "ushort", TokenKind.UShort     },
+		{ "uint",   TokenKind.UInt       },
+		{ "ulong",  TokenKind.ULong      },
+		{ "byte",   TokenKind.Byte       },
+		{ "short",  TokenKind.Short      },
+		{ "int",    TokenKind.Int        },
+		{ "long",   TokenKind.Long       },
+    
+		{ "single", TokenKind.Single     },
+		{ "double", TokenKind.Double     },
 
-		{ "return", TokenKind.Return },
+		{ "return", TokenKind.Return     },
 	};
 
 	public Scanner(string source)
@@ -157,9 +163,11 @@ public class Scanner
 
 				while (!IsEnd() && IsNumber(GetCurrent()))
 					Advance();
+
+				return Make(TokenKind.Float);
 			}
 
-			return Make(TokenKind.Number);
+			return Make(TokenKind.Integer);
 		}
 
 		// if (character == 'u')
@@ -227,6 +235,18 @@ public class Scanner
 				
 			case ';':
 				return Make(TokenKind.Semicolon);
+
+			case '"':
+			{
+				while (!IsEnd() && (GetCurrent() != '"'))
+					Advance();
+
+				if (IsEnd())
+					return Make(TokenKind.Error, "unterminated string.");
+
+				Advance(); // "
+				return Make(TokenKind.String);
+			}
 
 			case '.':
 				return Make(TokenKind.Dot);

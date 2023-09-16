@@ -118,6 +118,60 @@ public class Parser
 		return node;
 	}
 
+	private Node ParsePrimary()
+	{
+		if (Match(TokenKind.Integer))
+		{
+			return new NodeInteger()
+			{
+				Token = Previous,
+				Value = long.Parse(Previous.Content),
+			};
+		}
+
+		if (Match(TokenKind.Float))
+		{
+			return new NodeFloat()
+			{
+				Token = Previous,
+				Value = double.Parse(Previous.Content),			
+			};
+		}
+
+		if (Match(TokenKind.String))
+		{
+			return new NodeString()
+			{
+				Token = Previous,
+				Value = Previous.Content.Substring(1, Previous.Content.Length - 2),
+			};
+		}
+
+		if (Match(TokenKind.True) || Match(TokenKind.False))
+		{
+			return new NodeBool()
+			{
+				Token = Previous,
+				Value = (Previous.Kind == TokenKind.True),
+			};
+		}
+
+		if (Match(TokenKind.Null))
+		{
+			return new NodeNull()
+			{
+				Token = Previous,
+			};
+		}
+
+		return null;
+	}
+
+	private Node ParseExpression()
+	{
+		return ParsePrimary();
+	}
+
 	private Node ParseReturnStatement()
 	{
 		NodeReturn node = new()
@@ -125,8 +179,12 @@ public class Parser
 			Token = Previous
 		};
 
-		// TODO: return value.
-		Consume(TokenKind.Semicolon, "expected ';'.");
+		// Parse return value.
+		if (!Match(TokenKind.Semicolon))
+		{
+			node.Value = ParseExpression();
+			Consume(TokenKind.Semicolon, "expected ';'.");
+		}
 
 		return node;
 	}
